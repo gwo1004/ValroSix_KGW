@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{E72E45EA-4BFD-3A66-2C3E-C486D9F0BBC8}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "ValroSix_KGW",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	]
+}
