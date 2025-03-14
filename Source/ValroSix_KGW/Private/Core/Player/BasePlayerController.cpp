@@ -3,6 +3,16 @@
 
 #include "Core/Player/BasePlayerController.h"
 
+ABasePlayerController::ABasePlayerController()
+{
+}
 
+void ABasePlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+}
 
-
+void ABasePlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+}
