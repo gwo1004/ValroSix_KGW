@@ -32,6 +32,43 @@ void ABasePlayerController::SwitchControlMode(EControlMode Mode)
 
 void ABasePlayerController::UpdateCurrentIMC(UPlayerInputKeyData* CurrentDataAsset)
 {
+	bool bHasPawn = (GetPawn() != nullptr);
+
+	if (ULocalPlayer* LocalPlayer = GetLocalPlayer())
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* SubSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			for (auto& ControlMap : ControlModeMap)
+			{
+				if (ControlMap.Value.DataAsset == CurrentDataAsset)
+				{
+					UInputMappingContext* NewIMC = NewObject<UInputMappingContext>(this);
+
+					for (const FPlayerInputKeyMapping& Mapping : CurrentDataAsset->KeyMappings)
+					{
+						if (Mapping.InputAction && Mapping.CurrentKey.IsValid())
+						{
+							FEnhancedActionKeyMapping& NewMapping = NewIMC->MapKey(Mapping.InputAction, Mapping.CurrentKey);
+							for (UInputModifier* Modifier : Mapping.Modifiers)
+							{
+								if (Modifier)
+								{
+									NewMapping.Modifiers.Add(Modifier);
+								}
+							}
+						}
+					}
+
+					ControlMap.Value.IMC = NewIMC;
+					if (bHasPawn && ControlMap.Key == CurrentMode)
+					{
+						SubSystem->ClearAllMappings();
+						SubSystem->AddMappingContext(NewIMC, 0);
+					}
+				}
+			}
+		}
+	}
 }
 
 void ABasePlayerController::BeginPlay()
