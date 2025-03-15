@@ -2,34 +2,63 @@
 
 
 #include "Weapons/WeaponComponent.h"
+#include "Weapons/BaseWeapon.h"
+#include "Characters/PlayerCharacter/BasePlayableCharacter.h"
+#include "Engine/World.h"
+#include "Components/SkeletalMeshComponent.h"
 
-
-// Sets default values for this component's properties
 UWeaponComponent::UWeaponComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	PrimaryComponentTick.bCanEverTick = false;
+	WeaponAttachSocketName = TEXT("WeaponSocket");
 }
 
-
-// Called when the game starts
 void UWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
-
-// Called every frame
-void UWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UWeaponComponent::EquipWeapon(TSubclassOf<class ABaseWeapon> WeaponClass)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (ACharacter* OwnerCharacter = Cast<ACharacter>(GetOwner()))
+	{
+		if (WeaponClass)
+		{
+			UnEquipWeapon();
 
-	// ...
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = OwnerCharacter;
+			SpawnParams.Instigator = OwnerCharacter->GetInstigator();
+		
+			CurrentWeapon = GetWorld()->SpawnActor<ABaseWeapon>(WeaponClass, SpawnParams);
+			if (CurrentWeapon)
+			{
+				CurrentWeapon->AttachToComponent(OwnerCharacter->GetMesh(),
+					FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+					WeaponAttachSocketName);
+			}
+		}
+	}
 }
 
+void UWeaponComponent::UnEquipWeapon()
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->Destroy();
+		CurrentWeapon = nullptr;
+	}
+}
+
+ABaseWeapon* UWeaponComponent::GetCurrentWeapon() const
+{
+	return CurrentWeapon;
+}
+
+void UWeaponComponent::FireWeapon()
+{
+	if (CurrentWeapon)
+	{
+		//CurrentWeapon->Fire();
+	}
+}

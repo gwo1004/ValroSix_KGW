@@ -12,6 +12,7 @@ class UCameraComponent;
 
 class UInputAction;
 struct FInputActionValue;
+class UWeaponComponent;
 
 UCLASS()
 class VALROSIX_KGW_API ABasePlayableCharacter : public ACharacter
@@ -77,9 +78,18 @@ protected:
 	// Convert Camera Mesh Settings
 	void VisibilityMesh(const bool& IsFPSCamera);
 
+	// Weapons 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UWeaponComponent* WeaponComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class ABaseWeapon> WeaponClass;
+
+	void AttachWeapon();
 private:
 	void SpawnSetUpCamera();
 	void SpawnSetUpCharacterComponent();
+	void SpawnActorComponent();
 
 	//BindAction DataAsset
 	TMap<EPlayableInputAction, UInputAction*> InputActionMap;

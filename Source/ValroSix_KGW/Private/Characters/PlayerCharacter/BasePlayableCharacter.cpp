@@ -9,19 +9,27 @@
 #include <InputActionValue.h>
 #include "Core/Player/BasePlayerController.h"
 #include "Utility/LoggingCategories.h"
+#include "Weapons/WeaponComponent.h"
+#include "Weapons/BaseWeapon.h"
 
 ABasePlayableCharacter::ABasePlayableCharacter()
 {
  	PrimaryActorTick.bCanEverTick = false;
-
+	
 	SpawnSetUpCamera();
 	SpawnSetUpCharacterComponent();
+	SpawnActorComponent();
 }
 
 void ABasePlayableCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (WeaponComponent)
+	{
+		UE_LOG(LogPlayer, Error, TEXT("WeaponComponent is Null"));
+	}
+
+	AttachWeapon();
 }
 
 void ABasePlayableCharacter::Tick(float DeltaTime)
@@ -149,6 +157,28 @@ void ABasePlayableCharacter::VisibilityMesh(const bool& IsFPSCamera)
 	FPSCameraComp->SetActive(IsFPSCamera);
 }
 
+void ABasePlayableCharacter::AttachWeapon()
+{
+	
+	if (!IsValid(WeaponClass)) return;
+
+	ABaseWeapon* CurrentWeapon = GetWorld()->SpawnActor<ABaseWeapon>(WeaponClass);
+	if (CurrentWeapon)
+	{
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+		CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("WeaponSocket"));
+	}
+
+	//FName WeaponSocketName(TEXT("WeaponSocket"));
+	//if (GetMesh()->DoesSocketExist(WeaponSocketName))
+	//{
+	//	if (WeaponComponent)
+	//	{
+	//		return;
+	//	}
+	//}
+}
+
 void ABasePlayableCharacter::SpawnSetUpCamera()
 {
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
@@ -181,6 +211,11 @@ void ABasePlayableCharacter::SpawnSetUpCharacterComponent()
 
 	// AirControl
 	GetCharacterMovement()->AirControl = 2.f;
+}
+
+void ABasePlayableCharacter::SpawnActorComponent()
+{
+	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>(TEXT("WeaponComponent"));
 }
 
 void ABasePlayableCharacter::BindMapToDataAsset()

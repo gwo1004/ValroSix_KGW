@@ -16,10 +16,35 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
-public:	
 	virtual void Tick(float DeltaTime) override;
+public:	
 
-	
-	
+	bool CanEquip();
+	void Equip();
+	void BeginEquip();
+	void EndEquip();
+
+	bool CanUnEquip();
+	void Unequip();
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Equip")
+	FName HolsterSocketName;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+	class USceneComponent* Root;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+	class USkeletalMeshComponent* Mesh;
+
+	UPROPERTY(EditAnywhere, Category = "Socket Offset")
+	FVector SocketOffset;
+	UPROPERTY(EditAnywhere, Category = "Socket Offset")
+	FRotator SocketRotationOffset;
+
+private:
+	class ABasePlayableCharacter* Owner;
+
+
 };
