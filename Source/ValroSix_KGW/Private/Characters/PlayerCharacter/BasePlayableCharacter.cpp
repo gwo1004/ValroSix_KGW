@@ -167,6 +167,9 @@ void ABasePlayableCharacter::AttachWeapon()
 	{
 		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
 		CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("WeaponSocket"));
+		
+		CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->GetSocketOffset());
+		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->GetSocketRotation());
 	}
 
 	//FName WeaponSocketName(TEXT("WeaponSocket"));

@@ -27,6 +27,9 @@ public:
 	bool CanUnEquip();
 	void Unequip();
 
+	FVector GetSocketOffset() const { return SocketOffset; }
+	FRotator GetSocketRotation() const { return SocketRotationOffset; }
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Equip")
 	FName HolsterSocketName;
