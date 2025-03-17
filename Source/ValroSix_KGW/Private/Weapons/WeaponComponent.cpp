@@ -3,41 +3,80 @@
 
 #include "Weapons/WeaponComponent.h"
 #include "Weapons/BaseWeapon.h"
-#include "Characters/PlayerCharacter/BasePlayableCharacter.h"
+#include "GameFramework\Character.h"
 #include "Engine/World.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Utility\LoggingCategories.h"
 
 UWeaponComponent::UWeaponComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	CurrentWeapon = nullptr;
 	WeaponAttachSocketName = TEXT("WeaponSocket");
 }
 
 void UWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
-void UWeaponComponent::EquipWeapon(TSubclassOf<class ABaseWeapon> WeaponClass)
+void UWeaponComponent::EquipWeapon(EWeaponType Slot, TSubclassOf<class ABaseWeapon> WeaponClass)
 {
-	if (ACharacter* OwnerCharacter = Cast<ACharacter>(GetOwner()))
-	{
-		if (WeaponClass)
-		{
-			UnEquipWeapon();
+	ACharacter* TargetOwner = Cast<ACharacter>(GetOwner());
 
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = OwnerCharacter;
-			SpawnParams.Instigator = OwnerCharacter->GetInstigator();
-		
-			CurrentWeapon = GetWorld()->SpawnActor<ABaseWeapon>(WeaponClass, SpawnParams);
-			if (CurrentWeapon)
-			{
-				CurrentWeapon->AttachToComponent(OwnerCharacter->GetMesh(),
-					FAttachmentTransformRules::SnapToTargetNotIncludingScale,
-					WeaponAttachSocketName);
-			}
-		}
+	if (!TargetOwner || !WeaponClass)
+	{
+		UE_LOG(LogWeapon, Error, TEXT("WeaponComponent_EquipWeapon Func Owner || WeaponClass nullptr"));
+		return;
+	}
+
+	if (EquipWeapons.Contains(Slot) && EquipWeapons[Slot])
+	{
+		EquipWeapons[Slot]->Destroy();
+		EquipWeapons[Slot] = nullptr;
+	}
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = TargetOwner;
+	SpawnParams.Instigator = TargetOwner->GetInstigator();
+	ABaseWeapon* NewWeapon = GetWorld()->SpawnActor<ABaseWeapon>(WeaponClass, SpawnParams);
+
+	if (NewWeapon)
+	{
+		NewWeapon->AttachToComponent(TargetOwner->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true),
+			WeaponAttachSocketName);
+		NewWeapon->SetActorRelativeLocation(NewWeapon->GetSocketOffset());
+		NewWeapon->SetActorRelativeRotation(NewWeapon->GetSocketRotation());
+		NewWeapon->SetActorEnableCollision(false);
+
+		EquipWeapons.Add(Slot, NewWeapon);
+		SwitchWeapon(Slot);
+	}
+	// SkeletalMesh 에 특정 소켓으로 부착
+	// KeepRelative : 상대적인 위치를 유지하며 부착
+	// true : 부착이 실패해도 실행을 계속
+}
+
+void UWeaponComponent::SwitchWeapon(EWeaponType Slot)
+{
+	ACharacter* TargetOwner = Cast<ACharacter>(GetOwner());
+
+	if (!TargetOwner || !EquipWeapons.Contains(Slot))
+	{
+		UE_LOG(LogWeapon, Error, TEXT("WeaponComponent_SwitchWeapon Func Owner || Target Weapon Slot is nullptr"));
+		return;
+	}
+
+	if (CurrentWeapon)
+	{
+		UnEquipWeapon();
+	}
+
+	CurrentWeapon = EquipWeapons[Slot];
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->SetActorHiddenInGame(false);
 	}
 }
 
@@ -45,20 +84,14 @@ void UWeaponComponent::UnEquipWeapon()
 {
 	if (CurrentWeapon)
 	{
-		CurrentWeapon->Destroy();
-		CurrentWeapon = nullptr;
+		CurrentWeapon->SetActorHiddenInGame(true);
 	}
-}
-
-ABaseWeapon* UWeaponComponent::GetCurrentWeapon() const
-{
-	return CurrentWeapon;
 }
 
 void UWeaponComponent::FireWeapon()
 {
 	if (CurrentWeapon)
 	{
-		//CurrentWeapon->Fire();
+		CurrentWeapon->Fire();
 	}
 }

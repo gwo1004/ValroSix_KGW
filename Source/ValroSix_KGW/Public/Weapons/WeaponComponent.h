@@ -24,13 +24,15 @@ class VALROSIX_KGW_API UWeaponComponent : public UActorComponent
 public:	
 	UWeaponComponent();
 
-protected:
+public:
 	virtual void BeginPlay() override;
 
 public:
 	// 무기 장착
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void EquipWeapon(TSubclassOf<class ABaseWeapon> WeaponClass);
+	void EquipWeapon(EWeaponType Slot, TSubclassOf<class ABaseWeapon> WeaponClass);
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void SwitchWeapon(EWeaponType Slot);
 
 	// 무기 장착 해제
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
@@ -38,16 +40,17 @@ public:
 
 	// 현재 장착된 무기
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	class ABaseWeapon* GetCurrentWeapon() const;
+	class ABaseWeapon* GetCurrentWeapon() const { return CurrentWeapon; }
 
 	// 발사
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void FireWeapon();
 		
 protected:
-	// 현재 무기
 	UPROPERTY()
 	class ABaseWeapon* CurrentWeapon;
+	UPROPERTY()
+	TMap<EWeaponType, ABaseWeapon*> EquipWeapons;
 
 	// 부착할 캐릭터 소켓 이름
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")

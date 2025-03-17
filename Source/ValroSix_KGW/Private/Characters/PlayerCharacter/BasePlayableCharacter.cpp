@@ -24,7 +24,8 @@ ABasePlayableCharacter::ABasePlayableCharacter()
 void ABasePlayableCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	if (WeaponComponent)
+
+	if (!WeaponComponent)
 	{
 		UE_LOG(LogPlayer, Error, TEXT("WeaponComponent is Null"));
 	}
@@ -131,12 +132,22 @@ void ABasePlayableCharacter::InputCrouch(const FInputActionValue& Value)
 		Super::Crouch();
 		UE_LOG(LogPlayer, Display, TEXT("InputCrount Func Call"));
 	}
+
+	if (WeaponComponent)
+	{
+		WeaponComponent->SwitchWeapon(EWeaponType::Rifle);
+	}
 }
 
 void ABasePlayableCharacter::StopCrouch(const FInputActionValue& Value)
 {
 	Super::UnCrouch();
 	UE_LOG(LogPlayer, Display, TEXT("StopCrouch Func Call"));
+
+	if (WeaponComponent)
+	{
+		WeaponComponent->SwitchWeapon(EWeaponType::Pistol);
+	}
 }
 
 void ABasePlayableCharacter::ConvertCameraActive(const FInputActionValue& Value)
@@ -159,17 +170,10 @@ void ABasePlayableCharacter::VisibilityMesh(const bool& IsFPSCamera)
 
 void ABasePlayableCharacter::AttachWeapon()
 {
-	
-	if (!IsValid(WeaponClass)) return;
-
-	ABaseWeapon* CurrentWeapon = GetWorld()->SpawnActor<ABaseWeapon>(WeaponClass);
-	if (CurrentWeapon)
+	if (WeaponComponent)
 	{
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
-		CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("WeaponSocket"));
-		
-		CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->GetSocketOffset());
-		CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->GetSocketRotation());
+		WeaponComponent->EquipWeapon(EWeaponType::Rifle, WeaponClass);
+		WeaponComponent->EquipWeapon(EWeaponType::Pistol, SubWeaponClass);
 	}
 
 	//FName WeaponSocketName(TEXT("WeaponSocket"));
@@ -218,7 +222,12 @@ void ABasePlayableCharacter::SpawnSetUpCharacterComponent()
 
 void ABasePlayableCharacter::SpawnActorComponent()
 {
-	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>(TEXT("WeaponComponent"));
+	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>(TEXT("Weapon"));
+	if (!WeaponComponent)
+	{
+		UE_LOG(LogPlayer, Error, TEXT("WeaponComponent CDO is Null"));
+	}
+	UE_LOG(LogPlayer, Error, TEXT("WeaponComponent CDO Success"));
 }
 
 void ABasePlayableCharacter::BindMapToDataAsset()

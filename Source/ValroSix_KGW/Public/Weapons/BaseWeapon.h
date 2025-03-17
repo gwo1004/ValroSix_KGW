@@ -18,26 +18,11 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 public:	
-
-	bool CanEquip();
-	void Equip();
-	void BeginEquip();
-	void EndEquip();
-
-	bool CanUnEquip();
-	void Unequip();
+	virtual void Fire();
 
 	FVector GetSocketOffset() const { return SocketOffset; }
 	FRotator GetSocketRotation() const { return SocketRotationOffset; }
-
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Equip")
-	FName HolsterSocketName;
-
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
-	class USceneComponent* Root;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class USkeletalMeshComponent* Mesh;
 
@@ -45,9 +30,4 @@ protected:
 	FVector SocketOffset;
 	UPROPERTY(EditAnywhere, Category = "Socket Offset")
 	FRotator SocketRotationOffset;
-
-private:
-	class ABasePlayableCharacter* Owner;
-
-
 };

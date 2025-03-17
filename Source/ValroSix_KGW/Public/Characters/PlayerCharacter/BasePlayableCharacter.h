@@ -79,11 +79,13 @@ protected:
 	void VisibilityMesh(const bool& IsFPSCamera);
 
 	// Weapons 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	UWeaponComponent* WeaponComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ABaseWeapon> WeaponClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class ABaseWeapon> SubWeaponClass;
 
 	void AttachWeapon();
 private:
