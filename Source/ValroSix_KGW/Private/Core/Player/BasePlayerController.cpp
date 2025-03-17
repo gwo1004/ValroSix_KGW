@@ -30,6 +30,7 @@ void ABasePlayerController::SwitchControlMode(EControlMode Mode)
 	}
 }
 
+// UI를 통한 조작키 변경 로직. NewIMC -> Player IMC에 반영하기
 void ABasePlayerController::UpdateCurrentIMC(UPlayerInputKeyData* CurrentDataAsset)
 {
 	bool bHasPawn = (GetPawn() != nullptr);

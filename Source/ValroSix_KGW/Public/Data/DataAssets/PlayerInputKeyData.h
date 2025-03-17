@@ -22,7 +22,12 @@ enum class EPlayableInputAction : uint8
 	Fire			UMETA(DisplayName = "Fire"),
 	Jump			UMETA(DisplayName = "Jump"),
 	Crouch			UMETA(DisplayName = "Crouch"),
-	ConvertCamera	UMETA(DisplayName = "Convert Camera")
+	ConvertCamera	UMETA(DisplayName = "Convert Camera"),
+	PrimaryWeapon	UMETA(DisplayName = "Primary Weapon"),
+	PistolWeapon	UMETA(DisplayName = "Pistol Weapon"),
+	MeleeWeapon		UMETA(DisplayName = "Melee Weapon"),
+	QuietlyWalk		UMETA(DisplayName = "QuietlyWalk"),
+	ReloadWeapon	UMETA(DisplayName = "Reload")
 };
 
 USTRUCT(BlueprintType)

@@ -61,6 +61,14 @@ protected:
 	UFUNCTION()
 	void ConvertCameraActive(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void SwitchPrimaryWeapon(const FInputActionValue& Value);
+	UFUNCTION()
+	void SwitchPistolWeapon(const FInputActionValue& Value);
+	UFUNCTION()
+	void SwitchMeleeWeapon(const FInputActionValue& Value);
+
+
 protected:
 	// Camera Components
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera")
@@ -86,8 +94,11 @@ protected:
 	TSubclassOf<class ABaseWeapon> WeaponClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ABaseWeapon> SubWeaponClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class ABaseWeapon> MeleeWeaponClass;
 
 	void AttachWeapon();
+	void SwitchCurrentWeapon(int32 WeaponType);
 private:
 	void SpawnSetUpCamera();
 	void SpawnSetUpCharacterComponent();

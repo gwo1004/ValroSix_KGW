@@ -51,7 +51,7 @@ void ABasePlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 			{
 				BindMapToDataAsset();
 				PC->SwitchControlMode(EControlMode::Character);
-				PC->UpdateCurrentIMC(PC->ControlModeMap[EControlMode::Character].DataAsset);
+				//PC->UpdateCurrentIMC(PC->ControlModeMap[EControlMode::Character].DataAsset);
 				
 				for (const FPlayerInputKeyMapping& Mapping : InputActions->KeyMappings)
 				{
@@ -135,7 +135,7 @@ void ABasePlayableCharacter::InputCrouch(const FInputActionValue& Value)
 
 	if (WeaponComponent)
 	{
-		WeaponComponent->SwitchWeapon(EWeaponType::Rifle);
+		WeaponComponent->SwitchWeapon(EWeaponType::Melee);
 	}
 }
 
@@ -146,7 +146,7 @@ void ABasePlayableCharacter::StopCrouch(const FInputActionValue& Value)
 
 	if (WeaponComponent)
 	{
-		WeaponComponent->SwitchWeapon(EWeaponType::Pistol);
+		WeaponComponent->SwitchWeapon(EWeaponType::Rifle);
 	}
 }
 
@@ -156,6 +156,22 @@ void ABasePlayableCharacter::ConvertCameraActive(const FInputActionValue& Value)
 	bIsFPSCamera = !bIsFPSCamera;
 	VisibilityMesh(bIsFPSCamera);
 }
+
+void ABasePlayableCharacter::SwitchPrimaryWeapon(const FInputActionValue& Value)
+{
+	SwitchCurrentWeapon((int32)EWeaponType::Rifle);
+}
+
+void ABasePlayableCharacter::SwitchPistolWeapon(const FInputActionValue& Value)
+{
+	SwitchCurrentWeapon((int32)EWeaponType::Pistol);
+}
+
+void ABasePlayableCharacter::SwitchMeleeWeapon(const FInputActionValue& Value)
+{
+	SwitchCurrentWeapon((int32)EWeaponType::Melee);
+}
+
 
 void ABasePlayableCharacter::VisibilityMesh(const bool& IsFPSCamera)
 {
@@ -168,22 +184,25 @@ void ABasePlayableCharacter::VisibilityMesh(const bool& IsFPSCamera)
 	FPSCameraComp->SetActive(IsFPSCamera);
 }
 
+// TODO :Event 형식으로 UI와 연동, 해당 WeaponClass를 WeaponComponent에 추가 요청.
 void ABasePlayableCharacter::AttachWeapon()
 {
 	if (WeaponComponent)
 	{
 		WeaponComponent->EquipWeapon(EWeaponType::Rifle, WeaponClass);
 		WeaponComponent->EquipWeapon(EWeaponType::Pistol, SubWeaponClass);
+		WeaponComponent->EquipWeapon(EWeaponType::Melee, MeleeWeaponClass);
 	}
+}
 
-	//FName WeaponSocketName(TEXT("WeaponSocket"));
-	//if (GetMesh()->DoesSocketExist(WeaponSocketName))
-	//{
-	//	if (WeaponComponent)
-	//	{
-	//		return;
-	//	}
-	//}
+void ABasePlayableCharacter::SwitchCurrentWeapon(int32 WeaponType)
+{
+	UE_LOG(LogPlayer, Warning, TEXT("WeaponType Call : %d"), int32(WeaponType));
+
+	if (WeaponComponent)
+	{
+		WeaponComponent->SwitchWeapon((EWeaponType)WeaponType);
+	}
 }
 
 void ABasePlayableCharacter::SpawnSetUpCamera()
@@ -225,9 +244,8 @@ void ABasePlayableCharacter::SpawnActorComponent()
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>(TEXT("Weapon"));
 	if (!WeaponComponent)
 	{
-		UE_LOG(LogPlayer, Error, TEXT("WeaponComponent CDO is Null"));
+		UE_LOG(LogPlayer, Error, TEXT("WeaponComponent CDO Fail"));
 	}
-	UE_LOG(LogPlayer, Error, TEXT("WeaponComponent CDO Success"));
 }
 
 void ABasePlayableCharacter::BindMapToDataAsset()
@@ -240,6 +258,9 @@ void ABasePlayableCharacter::BindMapToDataAsset()
 	InputActionBindings.Add(EPlayableInputAction::Jump, { {ETriggerEvent::Started, "InputJump"} });
 	InputActionBindings.Add(EPlayableInputAction::LookUp, { {ETriggerEvent::Triggered, "LookUp"} });
 	InputActionBindings.Add(EPlayableInputAction::ConvertCamera, { {ETriggerEvent::Started, "ConvertCameraActive"} });
+	InputActionBindings.Add(EPlayableInputAction::PrimaryWeapon, { {ETriggerEvent::Started, "SwitchPrimaryWeapon"} });
+	InputActionBindings.Add(EPlayableInputAction::PistolWeapon, { {ETriggerEvent::Started, "SwitchPistolWeapon"} });
+	InputActionBindings.Add(EPlayableInputAction::MeleeWeapon, { {ETriggerEvent::Started, "SwitchMeleeWeapon"} });
 
 	InputActionBindings.Add(EPlayableInputAction::Crouch, {
 	{ETriggerEvent::Started, "InputCrouch"},

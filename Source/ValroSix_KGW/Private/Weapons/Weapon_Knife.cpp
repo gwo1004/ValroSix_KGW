@@ -1,0 +1,22 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Weapons/Weapon_Knife.h"
+
+AWeapon_Knife::AWeapon_Knife()
+{
+	PrimaryActorTick.bCanEverTick = false;
+}
+
+void AWeapon_Knife::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AWeapon_Knife::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+
+
