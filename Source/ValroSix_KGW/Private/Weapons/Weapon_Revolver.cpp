@@ -12,12 +12,6 @@ AWeapon_Revolver::AWeapon_Revolver()
 	bIsAuto = false;
 }
 
-void AWeapon_Revolver::Fire()
-{
-	Super::Fire();
-	UE_LOG(LogWeapon, Display, TEXT("Revolver Fire Test"));
-}
-
 void AWeapon_Revolver::BeginPlay()
 {
 	Super::BeginPlay();

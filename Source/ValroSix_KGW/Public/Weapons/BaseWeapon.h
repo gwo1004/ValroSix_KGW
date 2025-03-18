@@ -38,4 +38,9 @@ protected:
 	float FireRate = 0.5f;
 	UPROPERTY(EditAnywhere, Category = "Fire")
 	bool bIsAuto = false;
+
+protected:
+	//Test LineTrace
+	UPROPERTY(EditAnywhere, Category = "Fire")
+	float FireRange = 1000.f;
 };

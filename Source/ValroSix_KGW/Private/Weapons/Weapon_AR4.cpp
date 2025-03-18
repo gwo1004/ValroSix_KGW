@@ -12,11 +12,6 @@ AWeapon_AR4::AWeapon_AR4()
 	bIsAuto = true;
 }
 
-void AWeapon_AR4::Fire()
-{
-	UE_LOG(LogWeapon, Display, TEXT("AR4 Fire Test"));
-}
-
 void AWeapon_AR4::BeginPlay()
 {
 	Super::BeginPlay();
