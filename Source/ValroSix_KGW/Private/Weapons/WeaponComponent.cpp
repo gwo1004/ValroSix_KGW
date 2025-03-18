@@ -12,6 +12,7 @@ UWeaponComponent::UWeaponComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 	CurrentWeapon = nullptr;
+	bCanFire = true;
 	WeaponAttachSocketName = TEXT("WeaponSocket");
 }
 
@@ -89,6 +90,50 @@ void UWeaponComponent::UnEquipWeapon()
 }
 
 void UWeaponComponent::FireWeapon()
+{
+	if (!CurrentWeapon)
+	{
+		UE_LOG(LogWeapon, Error, TEXT("Current Weapon is Not Valid. - WeaponComponent.cpp"));
+		return;
+	}
+	if (!bCanFire) return;
+	
+	CurrentWeapon->Fire();
+	bCanFire = false;
+	
+	// TODO : Anim Notify를 사용한 애니메이션과 동기화.
+	// 현재 로직은 발사중에 총기 변환시 Auto가 False인 총기에도 발사가 되고있음.
+	// 해당 문제를 Notify를 사용한 리팩토링 예정.
+	if (GetWorld())
+	{
+		GetWorld()->GetTimerManager().SetTimer(ResetFireTimer, this, &UWeaponComponent::ResetFire, CurrentWeapon->GetFireRate(), false);
+	}
+
+	if (CurrentWeapon->GetIsAuto() && GetWorld())
+	{
+		GetWorld()->GetTimerManager().SetTimer(AutoFireTimer, this, &UWeaponComponent::AutoFire, CurrentWeapon->GetFireRate(), true);
+	}
+}
+
+void UWeaponComponent::EndFireWeapon()
+{
+	if (GetWorld() && AutoFireTimer.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(AutoFireTimer);
+	}
+}
+
+void UWeaponComponent::ResetFire()
+{
+	bCanFire = true;
+
+	if (GetWorld()->GetTimerManager().IsTimerActive(ResetFireTimer))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(ResetFireTimer);
+	}
+}
+
+void UWeaponComponent::AutoFire()
 {
 	if (CurrentWeapon)
 	{

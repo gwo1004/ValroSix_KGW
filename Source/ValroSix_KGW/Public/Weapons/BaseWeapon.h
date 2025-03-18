@@ -20,8 +20,11 @@ protected:
 public:	
 	virtual void Fire();
 
+	bool GetIsAuto() const { return bIsAuto; }
+	float GetFireRate() const { return FireRate; }
 	FVector GetSocketOffset() const { return SocketOffset; }
 	FRotator GetSocketRotation() const { return SocketRotationOffset; }
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class USkeletalMeshComponent* Mesh;
@@ -30,4 +33,9 @@ protected:
 	FVector SocketOffset;
 	UPROPERTY(EditAnywhere, Category = "Socket Offset")
 	FRotator SocketRotationOffset;
+
+	UPROPERTY(EditAnywhere, Category = "Fire")
+	float FireRate = 0.5f;
+	UPROPERTY(EditAnywhere, Category = "Fire")
+	bool bIsAuto = false;
 };

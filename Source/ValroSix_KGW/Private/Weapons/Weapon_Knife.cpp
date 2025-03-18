@@ -8,6 +8,10 @@ AWeapon_Knife::AWeapon_Knife()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void AWeapon_Knife::Fire()
+{
+}
+
 void AWeapon_Knife::BeginPlay()
 {
 	Super::BeginPlay();

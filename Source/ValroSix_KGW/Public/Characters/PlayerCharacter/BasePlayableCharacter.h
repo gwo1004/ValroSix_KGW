@@ -47,6 +47,9 @@ protected:
 	void Fire(const FInputActionValue& Value);
 
 	UFUNCTION()
+	void EndFire(const FInputActionValue& Value);
+
+	UFUNCTION()
 	void LookUp(const FInputActionValue& Value);
 
 	UFUNCTION()

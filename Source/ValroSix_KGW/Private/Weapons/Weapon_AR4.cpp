@@ -2,10 +2,19 @@
 
 
 #include "Weapons/Weapon_AR4.h"
+#include "Utility/LoggingCategories.h"
 
 AWeapon_AR4::AWeapon_AR4()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	FireRate = 0.1f;
+	bIsAuto = true;
+}
+
+void AWeapon_AR4::Fire()
+{
+	UE_LOG(LogWeapon, Display, TEXT("AR4 Fire Test"));
 }
 
 void AWeapon_AR4::BeginPlay()

@@ -2,10 +2,20 @@
 
 
 #include "Weapons/Weapon_Revolver.h"
+#include "Utility/LoggingCategories.h"
 
 AWeapon_Revolver::AWeapon_Revolver()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	FireRate = 0.2f;
+	bIsAuto = false;
+}
+
+void AWeapon_Revolver::Fire()
+{
+	Super::Fire();
+	UE_LOG(LogWeapon, Display, TEXT("Revolver Fire Test"));
 }
 
 void AWeapon_Revolver::BeginPlay()

@@ -45,7 +45,12 @@ public:
 	// 발사
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void FireWeapon();
-		
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void EndFireWeapon();
+
+
+
 protected:
 	UPROPERTY()
 	class ABaseWeapon* CurrentWeapon;
@@ -55,4 +60,12 @@ protected:
 	// 부착할 캐릭터 소켓 이름
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	FName WeaponAttachSocketName;
+
+private:
+	bool bCanFire;
+	FTimerHandle ResetFireTimer;
+	void ResetFire();
+
+	FTimerHandle AutoFireTimer;
+	void AutoFire();
 };

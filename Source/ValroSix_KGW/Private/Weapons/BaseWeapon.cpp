@@ -4,6 +4,7 @@
 #include "Weapons/BaseWeapon.h"
 #include "Characters/PlayerCharacter/BasePlayableCharacter.h"
 #include <Components/SkeletalMeshComponent.h>
+#include "Utility/LoggingCategories.h"
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -27,4 +28,5 @@ void ABaseWeapon::Tick(float DeltaTime)
 
 void ABaseWeapon::Fire()
 {
+	UE_LOG(LogWeapon, Display, TEXT("BaseWeapon Fire Test"));
 }

@@ -111,6 +111,19 @@ void ABasePlayableCharacter::MoveLeft(const FInputActionValue& Value)
 void ABasePlayableCharacter::Fire(const FInputActionValue& Value)
 {
 	UE_LOG(LogPlayer, Display, TEXT("Fire Func Call"));
+	if (WeaponComponent)
+	{
+		WeaponComponent->FireWeapon();
+	}
+}
+
+void ABasePlayableCharacter::EndFire(const FInputActionValue& Value)
+{
+	UE_LOG(LogPlayer, Display, TEXT("EndFire Func Call"));
+	if (WeaponComponent)
+	{
+		WeaponComponent->EndFireWeapon();
+	}
 }
 
 void ABasePlayableCharacter::LookUp(const FInputActionValue& Value)
@@ -132,22 +145,12 @@ void ABasePlayableCharacter::InputCrouch(const FInputActionValue& Value)
 		Super::Crouch();
 		UE_LOG(LogPlayer, Display, TEXT("InputCrount Func Call"));
 	}
-
-	if (WeaponComponent)
-	{
-		WeaponComponent->SwitchWeapon(EWeaponType::Melee);
-	}
 }
 
 void ABasePlayableCharacter::StopCrouch(const FInputActionValue& Value)
 {
 	Super::UnCrouch();
 	UE_LOG(LogPlayer, Display, TEXT("StopCrouch Func Call"));
-
-	if (WeaponComponent)
-	{
-		WeaponComponent->SwitchWeapon(EWeaponType::Rifle);
-	}
 }
 
 void ABasePlayableCharacter::ConvertCameraActive(const FInputActionValue& Value)
@@ -254,7 +257,6 @@ void ABasePlayableCharacter::BindMapToDataAsset()
 	InputActionBindings.Add(EPlayableInputAction::MoveBack, { {ETriggerEvent::Triggered, "MoveBack"} });
 	InputActionBindings.Add(EPlayableInputAction::MoveRight, { {ETriggerEvent::Triggered, "MoveRight"} });
 	InputActionBindings.Add(EPlayableInputAction::MoveLeft, { {ETriggerEvent::Triggered, "MoveLeft"} });
-	InputActionBindings.Add(EPlayableInputAction::Fire, { {ETriggerEvent::Triggered, "Fire"} });
 	InputActionBindings.Add(EPlayableInputAction::Jump, { {ETriggerEvent::Started, "InputJump"} });
 	InputActionBindings.Add(EPlayableInputAction::LookUp, { {ETriggerEvent::Triggered, "LookUp"} });
 	InputActionBindings.Add(EPlayableInputAction::ConvertCamera, { {ETriggerEvent::Started, "ConvertCameraActive"} });
@@ -262,9 +264,15 @@ void ABasePlayableCharacter::BindMapToDataAsset()
 	InputActionBindings.Add(EPlayableInputAction::PistolWeapon, { {ETriggerEvent::Started, "SwitchPistolWeapon"} });
 	InputActionBindings.Add(EPlayableInputAction::MeleeWeapon, { {ETriggerEvent::Started, "SwitchMeleeWeapon"} });
 
-	InputActionBindings.Add(EPlayableInputAction::Crouch, {
-	{ETriggerEvent::Started, "InputCrouch"},
-	{ETriggerEvent::Completed, "StopCrouch"}
+	InputActionBindings.Add(EPlayableInputAction::Fire, {
+		{ETriggerEvent::Started, "Fire"},
+		{ETriggerEvent::Completed, "EndFire"}
 		});
+
+	InputActionBindings.Add(EPlayableInputAction::Crouch, {
+		{ETriggerEvent::Started, "InputCrouch"},
+		{ETriggerEvent::Completed, "StopCrouch"}
+		});
+
 
 }
