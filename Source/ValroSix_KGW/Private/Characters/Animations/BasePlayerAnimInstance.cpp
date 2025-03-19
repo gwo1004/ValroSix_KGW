@@ -5,14 +5,18 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Characters/PlayerCharacter/BasePlayableCharacter.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void UBasePlayerAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
 
 	Speed = 0.f;
+	Direction = 0.f;
 	bIsJump = false;
 	bIsCrouch = false;
+	AimPitch = 0.f;
+	AimYaw = 0.f;
 }
 
 void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -31,4 +35,11 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	bIsJump = Player->GetCharacterMovement()->IsFalling();
 	bIsCrouch = Player->bIsCrouched;
+
+	FRotator ControlRotation = Player->GetControlRotation();
+	FRotator ActorRotation = Player->GetActorRotation();
+	FRotator DeltaRot = UKismetMathLibrary::NormalizedDeltaRotator(ControlRotation, ActorRotation);
+
+	AimYaw = DeltaRot.Yaw;
+	AimPitch = DeltaRot.Pitch;
 }

@@ -31,4 +31,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	bool bIsCrouch;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Aim Offset")
+	float AimPitch;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Aim Offset")
+	float AimYaw;
 };
