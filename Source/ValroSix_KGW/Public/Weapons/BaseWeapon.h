@@ -18,6 +18,10 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 public:	
+	UFUNCTION(Server, Reliable)
+	void Server_Fire();
+
+
 	virtual void Fire();
 
 	bool GetIsAuto() const { return bIsAuto; }
@@ -43,4 +47,7 @@ protected:
 	//Test LineTrace
 	UPROPERTY(EditAnywhere, Category = "Fire")
 	float FireRange = 1000.f;
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void Multicast_DrawLine(FVector start, FVector end, bool bHit, FVector HitPoint);
 };

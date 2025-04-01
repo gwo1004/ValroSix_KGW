@@ -12,7 +12,11 @@ ABaseWeapon::ABaseWeapon()
  	PrimaryActorTick.bCanEverTick = false;
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(RootComponent);
+	//Mesh->SetupAttachment(RootComponent);
+	RootComponent = Mesh;
+
+	bReplicates = true;
+	SetReplicatingMovement(true);
 }
 
 void ABaseWeapon::BeginPlay()
@@ -27,6 +31,11 @@ void ABaseWeapon::Tick(float DeltaTime)
 
 }
 
+void ABaseWeapon::Server_Fire_Implementation()
+{
+	Fire();
+}
+
 void ABaseWeapon::Fire()
 {
 	ACharacter* TargetOwner = Cast<ACharacter>(GetOwner());
@@ -35,7 +44,6 @@ void ABaseWeapon::Fire()
 		UE_LOG(LogWeapon, Error, TEXT("TargetOwner is null - ABaseWeapon.cpp"));
 		return;
 	}
-
 	FVector FireStart = TargetOwner->GetPawnViewLocation();
 	FVector FireDirection = TargetOwner->GetControlRotation().Vector();
 
@@ -49,24 +57,27 @@ void ABaseWeapon::Fire()
 		HitResult, FireStart, FireEnd, ECC_Visibility, QueryParams
 	);
 
-    if (bHit)
-    {
-        AActor* HitActor = HitResult.GetActor();
-        if (HitActor)
-        {
-            UE_LOG(LogWeapon, Warning, TEXT("Hit: %s"), *HitActor->GetName());
+	if (bHit)
+	{
+		AActor* HitActor = HitResult.GetActor();
+		if (HitActor)
+		{
+			UE_LOG(LogWeapon, Warning, TEXT("Hit: %s"), *HitActor->GetName());
+		}
 
-            //UGameplayStatics::ApplyPointDamage(
-            //    HitActor, 25.0f, FireDirection, HitResult,
-            //    TargetOwner->GetInstigatorController(), this, nullptr);
-        }
-        DrawDebugLine(GetWorld(), FireStart, HitResult.ImpactPoint, FColor::Red, false, 1.0f, 0, 2.0f);
-        DrawDebugPoint(GetWorld(), HitResult.ImpactPoint, 10.0f, FColor::Yellow, false, 1.0f);
-    }
-    else
-    {
+		Multicast_DrawLine(FireStart, HitResult.ImpactPoint, true, HitResult.ImpactPoint);
+	}
+	else
+	{
+		Multicast_DrawLine(FireStart, FireEnd, false, FVector::ZeroVector);
+	}
+}
 
-        DrawDebugLine(GetWorld(), FireStart, FireEnd, FColor::Blue, false, 1.0f, 0, 2.0f);
-
-    }
+void ABaseWeapon::Multicast_DrawLine_Implementation(FVector start, FVector end, bool bHit, FVector HitPoint)
+{
+	DrawDebugLine(GetWorld(), start, end, bHit ? FColor::Red : FColor::Blue, false, 1.5f, 0, 2.0f);
+	if (bHit)
+	{
+		DrawDebugPoint(GetWorld(), HitPoint, 10.0f, FColor::Yellow, false, 1.5f);
+	}
 }

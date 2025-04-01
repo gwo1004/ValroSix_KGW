@@ -11,6 +11,8 @@
 #include "Utility/LoggingCategories.h"
 #include "Weapons/WeaponComponent.h"
 #include "Weapons/BaseWeapon.h"
+#include "Characters/Animations/BasePlayerAnimInstance.h"
+#include "Components/CapsuleComponent.h"
 
 ABasePlayableCharacter::ABasePlayableCharacter()
 {
@@ -19,6 +21,7 @@ ABasePlayableCharacter::ABasePlayableCharacter()
 	SpawnSetUpCamera();
 	SpawnSetUpCharacterComponent();
 	SpawnActorComponent();
+
 }
 
 void ABasePlayableCharacter::BeginPlay()
@@ -30,7 +33,10 @@ void ABasePlayableCharacter::BeginPlay()
 		UE_LOG(LogPlayer, Error, TEXT("WeaponComponent is Null"));
 	}
 
-	AttachWeapon();
+	if (HasAuthority())
+	{
+		AttachWeapon();
+	}
 }
 
 void ABasePlayableCharacter::Tick(float DeltaTime)
@@ -205,6 +211,11 @@ void ABasePlayableCharacter::SwitchCurrentWeapon(int32 WeaponType)
 	if (WeaponComponent)
 	{
 		WeaponComponent->SwitchWeapon((EWeaponType)WeaponType);
+		
+		if (UBasePlayerAnimInstance* PlayerAnim = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance()))
+		{
+			PlayerAnim->SetWeaponType(WeaponComponent->GetCurrentWeaponType());
+		}
 	}
 }
 
@@ -240,6 +251,10 @@ void ABasePlayableCharacter::SpawnSetUpCharacterComponent()
 
 	// AirControl
 	GetCharacterMovement()->AirControl = 2.f;
+
+	// Collisions
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 }
 
 void ABasePlayableCharacter::SpawnActorComponent()

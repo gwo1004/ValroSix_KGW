@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Weapons/WeaponComponent.h"
 #include "BasePlayerAnimInstance.generated.h"
 
 /**
@@ -18,6 +19,7 @@ public:
 	void NativeBeginPlay() override;
 	void NativeUpdateAnimation(float DeltaSeconds) override;
 
+	void SetWeaponType(EWeaponType CurrentWeaponType) { BlendType = CurrentWeaponType; }
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
 	float Speed;
@@ -36,4 +38,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Aim Offset")
 	float AimYaw;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blend Enum")
+	EWeaponType BlendType;
 };

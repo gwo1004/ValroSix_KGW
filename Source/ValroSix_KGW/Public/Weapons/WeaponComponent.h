@@ -9,6 +9,7 @@
 UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {
+	Unarmed UMETA(DisplayName = "UnArmed"),
 	Rifle	UMETA(DisplayName = "Rifle"),
 	Pistol	UMETA(DisplayName = "Pistol"),
 	Melee	UMETA(DisplayName = "Melee")
@@ -34,6 +35,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void SwitchWeapon(EWeaponType Slot);
 
+	UFUNCTION(Server, Reliable)
+	void Server_SwitchWeapon(EWeaponType Slot);
+
 	// 무기 장착 해제
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void UnEquipWeapon();
@@ -49,10 +53,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void EndFireWeapon();
 
+	EWeaponType GetCurrentWeaponType() const { return CurrentWeaponType; }
+	
+	UFUNCTION()
+	void OnRep_CurrentWeapon();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	UPROPERTY()
+	EWeaponType CurrentWeaponType;
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentWeapon)
 	class ABaseWeapon* CurrentWeapon;
 	UPROPERTY()
 	TMap<EWeaponType, ABaseWeapon*> EquipWeapons;

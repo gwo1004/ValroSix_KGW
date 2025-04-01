@@ -7,13 +7,16 @@
 #include "Engine/World.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Utility\LoggingCategories.h"
+#include "Net\UnrealNetwork.h"
 
 UWeaponComponent::UWeaponComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	CurrentWeaponType = EWeaponType::Unarmed;
 	CurrentWeapon = nullptr;
 	bCanFire = true;
 	WeaponAttachSocketName = TEXT("WeaponSocket");
+	SetIsReplicatedByDefault(true);
 }
 
 void UWeaponComponent::BeginPlay()
@@ -61,6 +64,18 @@ void UWeaponComponent::EquipWeapon(EWeaponType Slot, TSubclassOf<class ABaseWeap
 
 void UWeaponComponent::SwitchWeapon(EWeaponType Slot)
 {
+	if (GetOwner()->HasAuthority())
+	{
+		Server_SwitchWeapon(Slot);
+	}
+	else
+	{
+		Server_SwitchWeapon(Slot);
+	}
+}
+
+void UWeaponComponent::Server_SwitchWeapon_Implementation(EWeaponType Slot)
+{
 	ACharacter* TargetOwner = Cast<ACharacter>(GetOwner());
 
 	if (!TargetOwner || !EquipWeapons.Contains(Slot))
@@ -77,6 +92,7 @@ void UWeaponComponent::SwitchWeapon(EWeaponType Slot)
 	CurrentWeapon = EquipWeapons[Slot];
 	if (CurrentWeapon)
 	{
+		CurrentWeaponType = Slot;
 		CurrentWeapon->SetActorHiddenInGame(false);
 	}
 }
@@ -98,7 +114,14 @@ void UWeaponComponent::FireWeapon()
 	}
 	if (!bCanFire) return;
 	
-	CurrentWeapon->Fire();
+	if (GetOwner()->HasAuthority())
+	{
+		CurrentWeapon->Fire();
+	}
+	else
+	{
+		CurrentWeapon->Server_Fire();
+	}
 	bCanFire = false;
 	
 	// TODO : Anim Notify를 사용한 애니메이션과 동기화.
@@ -123,6 +146,30 @@ void UWeaponComponent::EndFireWeapon()
 	}
 }
 
+void UWeaponComponent::OnRep_CurrentWeapon()
+{
+	if (!CurrentWeapon) return;
+
+	//ACharacter* TargetOwner = Cast<ACharacter>(GetOwner());
+	//if (!TargetOwner || !TargetOwner->GetMesh()) return;
+
+	//CurrentWeapon->AttachToComponent(TargetOwner->GetMesh(),
+	//	FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+	//	WeaponAttachSocketName);
+
+	//CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->GetSocketOffset());
+	//CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->GetSocketRotation());
+	//CurrentWeapon->SetActorEnableCollision(false);
+
+	//UE_LOG(LogTemp, Warning, TEXT("[Client] Replicated weapon attached: %s"), *CurrentWeapon->GetName());
+}
+
+void UWeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(UWeaponComponent, CurrentWeapon);
+}
+
 void UWeaponComponent::ResetFire()
 {
 	bCanFire = true;
@@ -137,6 +184,13 @@ void UWeaponComponent::AutoFire()
 {
 	if (CurrentWeapon)
 	{
-		CurrentWeapon->Fire();
+		if (GetOwner()->HasAuthority())
+		{
+			CurrentWeapon->Fire();
+		}
+		else
+		{
+			CurrentWeapon->Server_Fire();
+		}
 	}
 }

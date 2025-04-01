@@ -71,7 +71,6 @@ protected:
 	UFUNCTION()
 	void SwitchMeleeWeapon(const FInputActionValue& Value);
 
-
 protected:
 	// Camera Components
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera")
