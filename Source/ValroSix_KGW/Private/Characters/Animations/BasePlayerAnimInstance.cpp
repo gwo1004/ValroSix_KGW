@@ -17,6 +17,7 @@ void UBasePlayerAnimInstance::NativeBeginPlay()
 	bIsCrouch = false;
 	AimPitch = 0.f;
 	AimYaw = 0.f;
+	BlendType = EWeaponType::Unarmed;
 }
 
 void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -29,7 +30,7 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	Speed = Owner->GetVelocity().Size();
 	Direction = CalculateDirection(Owner->GetVelocity(), Owner->GetActorRotation());
-	
+
 	ABasePlayableCharacter* Player = Cast<ABasePlayableCharacter>(Owner);
 	if (!Player) return;
 
