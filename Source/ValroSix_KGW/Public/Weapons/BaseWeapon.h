@@ -43,6 +43,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Fire")
 	bool bIsAuto = false;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	FName MuzzleSocketName;
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	class UNiagaraSystem* MuzzleFX;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	class USoundBase* FireSound;
+
 protected:
 	//Test LineTrace
 	UPROPERTY(EditAnywhere, Category = "Fire")
@@ -50,4 +59,10 @@ protected:
 
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_DrawLine(FVector start, FVector end, bool bHit, FVector HitPoint);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void Multicast_FireEffects();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_FireSound();
 };

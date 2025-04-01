@@ -150,18 +150,18 @@ void UWeaponComponent::OnRep_CurrentWeapon()
 {
 	if (!CurrentWeapon) return;
 
-	//ACharacter* TargetOwner = Cast<ACharacter>(GetOwner());
-	//if (!TargetOwner || !TargetOwner->GetMesh()) return;
+	ACharacter* TargetOwner = Cast<ACharacter>(GetOwner());
+	if (!TargetOwner || !TargetOwner->GetMesh()) return;
 
-	//CurrentWeapon->AttachToComponent(TargetOwner->GetMesh(),
-	//	FAttachmentTransformRules::SnapToTargetNotIncludingScale,
-	//	WeaponAttachSocketName);
+	CurrentWeapon->AttachToComponent(TargetOwner->GetMesh(),
+		FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+		WeaponAttachSocketName);
 
-	//CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->GetSocketOffset());
-	//CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->GetSocketRotation());
-	//CurrentWeapon->SetActorEnableCollision(false);
+	CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->GetSocketOffset());
+	CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->GetSocketRotation());
+	CurrentWeapon->SetActorEnableCollision(false);
 
-	//UE_LOG(LogTemp, Warning, TEXT("[Client] Replicated weapon attached: %s"), *CurrentWeapon->GetName());
+	UE_LOG(LogTemp, Warning, TEXT("[Client] Replicated weapon attached: %s"), *CurrentWeapon->GetName());
 }
 
 void UWeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
