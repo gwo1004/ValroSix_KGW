@@ -21,36 +21,50 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_Fire();
 
-
 	virtual void Fire();
 
 	bool GetIsAuto() const { return bIsAuto; }
-	float GetFireRate() const { return FireRate; }
+	float GetFireRate() const { return CurrentFireRate; }
 	FVector GetSocketOffset() const { return SocketOffset; }
 	FRotator GetSocketRotation() const { return SocketRotationOffset; }
 
 protected:
+	virtual void InitializedWeaponData();
+
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class USkeletalMeshComponent* Mesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "WeaponData")
+	class UWeaponDataAsset* WeaponData;
 
 	UPROPERTY(EditAnywhere, Category = "Socket Offset")
 	FVector SocketOffset;
 	UPROPERTY(EditAnywhere, Category = "Socket Offset")
 	FRotator SocketRotationOffset;
 
+protected:
+	UPROPERTY(VisibleAnywhere)
+	int32 CurrentAmmo;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 CurrentReserveAmmo;
+
+	UPROPERTY(VisibleAnywhere)
+	float CurrentDamage;
+
+	UPROPERTY(VisibleAnywhere)
+	float CurrentFireRate;
+
+// DataAsset 적용 후 지우기
+protected:
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	FName MuzzleSocketName;
+
 	UPROPERTY(EditAnywhere, Category = "Fire")
 	float FireRate = 0.5f;
 	UPROPERTY(EditAnywhere, Category = "Fire")
 	bool bIsAuto = false;
-
-	UPROPERTY(EditAnywhere, Category = "Effects")
-	FName MuzzleSocketName;
-protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Effects")
-	class UNiagaraSystem* MuzzleFX;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Effects")
-	class USoundBase* FireSound;
 
 protected:
 	//Test LineTrace

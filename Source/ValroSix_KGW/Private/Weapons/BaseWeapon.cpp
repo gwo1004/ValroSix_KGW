@@ -5,6 +5,7 @@
 #include "Characters/PlayerCharacter/BasePlayableCharacter.h"
 #include <Components/SkeletalMeshComponent.h>
 #include "Utility/LoggingCategories.h"
+#include "Data\DataAssets\WeaponDataAsset.h"
 #include "Kismet\GameplayStatics.h"
 #include "Sound/SoundBase.h"
 #include "NiagaraFunctionLibrary.h"
@@ -26,6 +27,7 @@ void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	InitializedWeaponData();
 }
 
 void ABaseWeapon::Tick(float DeltaTime)
@@ -70,6 +72,7 @@ void ABaseWeapon::Fire()
 		if (HitActor)
 		{
 			UE_LOG(LogWeapon, Warning, TEXT("Hit: %s"), *HitActor->GetName());
+			UE_LOG(LogWeapon, Warning, TEXT("Damage : %f"), CurrentDamage);
 		}
 
 		Multicast_DrawLine(FireStart, HitResult.ImpactPoint, true, HitResult.ImpactPoint);
@@ -80,12 +83,31 @@ void ABaseWeapon::Fire()
 	}
 }
 
+void ABaseWeapon::InitializedWeaponData()
+{
+	CurrentAmmo = 100;
+	CurrentReserveAmmo = 100;
+	CurrentDamage = 50;
+	CurrentFireRate = 1.f;
+
+	if (!WeaponData)
+	{
+		UE_LOG(LogWeapon, Error, TEXT("WeaponDataAsset Not Wrapping."));
+		return;
+	}
+
+	CurrentAmmo = WeaponData->MagazineSize;
+	CurrentReserveAmmo = WeaponData->MaxAmmo;
+	CurrentDamage = WeaponData->Damage;
+	CurrentFireRate = WeaponData->FireRate;
+}
+
 void ABaseWeapon::Multicast_FireEffects_Implementation()
 {
-	if (MuzzleFX)
+	if (WeaponData && WeaponData->MuzzleFX)
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAttached(
-			MuzzleFX,
+			WeaponData->MuzzleFX,
 			Mesh,
 			MuzzleSocketName, // 소켓 이름
 			FVector::ZeroVector, 
@@ -98,10 +120,10 @@ void ABaseWeapon::Multicast_FireEffects_Implementation()
 
 void ABaseWeapon::Multicast_FireSound_Implementation()
 {
-	if (FireSound)
+	if (WeaponData && WeaponData->FireSound)
 	{
 		UGameplayStatics::SpawnSoundAttached(
-			FireSound,
+			WeaponData->FireSound,
 			Mesh,
 			MuzzleSocketName
 		);
