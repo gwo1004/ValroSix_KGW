@@ -9,6 +9,7 @@
 #include "Kismet\GameplayStatics.h"
 #include "Sound/SoundBase.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Net\UnrealNetwork.h"
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -66,6 +67,9 @@ void ABaseWeapon::Fire()
 		HitResult, FireStart, FireEnd, ECC_Visibility, QueryParams
 	);
 
+	--CurrentAmmo;
+	UE_LOG(LogWeapon, Warning, TEXT("CurrentAmmo : %d"), CurrentAmmo);
+
 	if (bHit)
 	{
 		AActor* HitActor = HitResult.GetActor();
@@ -100,6 +104,16 @@ void ABaseWeapon::InitializedWeaponData()
 	CurrentReserveAmmo = WeaponData->MaxAmmo;
 	CurrentDamage = WeaponData->Damage;
 	CurrentFireRate = WeaponData->FireRate;
+}
+
+void ABaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABaseWeapon, CurrentAmmo);
+	DOREPLIFETIME(ABaseWeapon, CurrentReserveAmmo);
+	DOREPLIFETIME(ABaseWeapon, CurrentDamage);
+	DOREPLIFETIME(ABaseWeapon, CurrentFireRate);
 }
 
 void ABaseWeapon::Multicast_FireEffects_Implementation()
