@@ -10,6 +10,7 @@
 #include "Sound/SoundBase.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Net\UnrealNetwork.h"
+#include "Materials\MaterialInterface.h"
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -80,6 +81,7 @@ void ABaseWeapon::Fire()
 		}
 
 		Multicast_DrawLine(FireStart, HitResult.ImpactPoint, true, HitResult.ImpactPoint);
+		SpawnImpactDecal(HitResult);
 	}
 	else
 	{
@@ -114,6 +116,27 @@ void ABaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(ABaseWeapon, CurrentReserveAmmo);
 	DOREPLIFETIME(ABaseWeapon, CurrentDamage);
 	DOREPLIFETIME(ABaseWeapon, CurrentFireRate);
+}
+
+void ABaseWeapon::SpawnImpactDecal(const FHitResult& Hit)
+{
+	if (!WeaponData && !WeaponData->DecalEffect)
+	{
+		UE_LOG(LogWeapon, Error, TEXT("Weapon Data || Decal Effect is null"));
+		return;
+	}
+
+	FRotator DecalRotation = Hit.ImpactNormal.Rotation();
+	DecalRotation.Pitch += 180.f;
+
+	UGameplayStatics::SpawnDecalAtLocation(
+		GetWorld(),
+		WeaponData->DecalEffect,
+		WeaponData->DecalSize,
+		Hit.ImpactPoint,
+		DecalRotation,
+		WeaponData->DecalLifeTime
+	);
 }
 
 void ABaseWeapon::Multicast_FireEffects_Implementation()

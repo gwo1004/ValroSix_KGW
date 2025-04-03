@@ -8,7 +8,6 @@ AWeapon_Revolver::AWeapon_Revolver()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	FireRate = 0.2f;
 	bIsAuto = false;
 }
 

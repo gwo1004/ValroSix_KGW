@@ -45,6 +45,11 @@ protected:
 	FRotator SocketRotationOffset;
 
 protected:
+
+	void SpawnImpactDecal(const FHitResult& Hit);
+
+// Replicate Properties
+protected:
 	UPROPERTY(VisibleAnywhere, Replicated)
 	int32 CurrentAmmo;
 
@@ -57,21 +62,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, Replicated)
 	float CurrentFireRate;
 
-// DataAsset 적용 후 지우기
 protected:
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	FName MuzzleSocketName;
 
 	UPROPERTY(EditAnywhere, Category = "Fire")
-	float FireRate = 0.5f;
-	UPROPERTY(EditAnywhere, Category = "Fire")
 	bool bIsAuto = false;
 
-protected:
-	//Test LineTrace
 	UPROPERTY(EditAnywhere, Category = "Fire")
 	float FireRange = 1000.f;
 
+protected:
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_DrawLine(FVector start, FVector end, bool bHit, FVector HitPoint);
 

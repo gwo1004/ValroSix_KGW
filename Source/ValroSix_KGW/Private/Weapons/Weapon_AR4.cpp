@@ -8,7 +8,6 @@ AWeapon_AR4::AWeapon_AR4()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	FireRate = 0.1f;
 	bIsAuto = true;
 }
 

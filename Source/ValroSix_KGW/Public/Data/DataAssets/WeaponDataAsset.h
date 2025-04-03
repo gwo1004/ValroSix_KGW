@@ -32,6 +32,16 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	class USoundBase* FireSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UMaterialInterface* DecalEffect;
+
+	UPROPERTY(EditDefaultsOnly)
+	FVector DecalSize = FVector(5.f, 5.f, 5.f);
+
+	UPROPERTY(EditDefaultsOnly)
+	float DecalLifeTime = 5.f;
+
 	
 };
 

@@ -2,6 +2,7 @@
 
 
 #include "Weapons/Weapon_Knife.h"
+#include "Utility\LoggingCategories.h"
 
 AWeapon_Knife::AWeapon_Knife()
 {
@@ -10,6 +11,7 @@ AWeapon_Knife::AWeapon_Knife()
 
 void AWeapon_Knife::Fire()
 {
+	UE_LOG(LogWeapon, Display, TEXT("Knife Call"));
 }
 
 void AWeapon_Knife::BeginPlay()
