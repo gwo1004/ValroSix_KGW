@@ -45,7 +45,7 @@ protected:
 	FRotator SocketRotationOffset;
 
 protected:
-
+	void HitDamage(const FHitResult& Hit);
 	void SpawnImpactDecal(const FHitResult& Hit);
 
 // Replicate Properties
@@ -57,7 +57,7 @@ protected:
 	int32 CurrentReserveAmmo;
 
 	UPROPERTY(VisibleAnywhere, Replicated)
-	float CurrentDamage;
+	float WeaponDefaultDamage;
 
 	UPROPERTY(VisibleAnywhere, Replicated)
 	float CurrentFireRate;
@@ -71,6 +71,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Fire")
 	float FireRange = 1000.f;
+
+private:
+	float CalculateDistanceDamage(FVector OwnerLocation, FVector TargetLocation);
 
 protected:
 	UFUNCTION(NetMulticast, Unreliable)

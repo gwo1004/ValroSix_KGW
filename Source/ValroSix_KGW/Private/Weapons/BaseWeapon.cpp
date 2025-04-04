@@ -77,9 +77,10 @@ void ABaseWeapon::Fire()
 		if (HitActor)
 		{
 			UE_LOG(LogWeapon, Warning, TEXT("Hit: %s"), *HitActor->GetName());
-			UE_LOG(LogWeapon, Warning, TEXT("Damage : %f"), CurrentDamage);
+			UE_LOG(LogWeapon, Warning, TEXT("Damage : %f"), WeaponDefaultDamage);
 		}
 
+		HitDamage(HitResult);
 		Multicast_DrawLine(FireStart, HitResult.ImpactPoint, true, HitResult.ImpactPoint);
 		SpawnImpactDecal(HitResult);
 	}
@@ -93,7 +94,7 @@ void ABaseWeapon::InitializedWeaponData()
 {
 	CurrentAmmo = 100;
 	CurrentReserveAmmo = 100;
-	CurrentDamage = 50;
+	WeaponDefaultDamage = 50;
 	CurrentFireRate = 1.f;
 
 	if (!WeaponData)
@@ -104,7 +105,7 @@ void ABaseWeapon::InitializedWeaponData()
 
 	CurrentAmmo = WeaponData->MagazineSize;
 	CurrentReserveAmmo = WeaponData->MaxAmmo;
-	CurrentDamage = WeaponData->Damage;
+	WeaponDefaultDamage = WeaponData->Damage;
 	CurrentFireRate = WeaponData->FireRate;
 }
 
@@ -114,8 +115,34 @@ void ABaseWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(ABaseWeapon, CurrentAmmo);
 	DOREPLIFETIME(ABaseWeapon, CurrentReserveAmmo);
-	DOREPLIFETIME(ABaseWeapon, CurrentDamage);
+	DOREPLIFETIME(ABaseWeapon, WeaponDefaultDamage);
 	DOREPLIFETIME(ABaseWeapon, CurrentFireRate);
+}
+
+void ABaseWeapon::HitDamage(const FHitResult& Hit)
+{
+	AActor* Target = Hit.GetActor();
+	if (!IsValid(Target))
+	{
+		return;
+	}
+
+	// 로직 검증용
+	UE_LOG(LogWeapon, Display, TEXT("Test : ApplyDamage Call"));
+	UE_LOG(LogWeapon, Display, TEXT("Target : %s"),*Target->GetName());
+	UE_LOG(LogWeapon, Display, TEXT("Instigator : %s"), *GetInstigatorController()->GetName());
+
+	CalculateDistanceDamage(Hit.TraceStart, Hit.ImpactPoint);
+
+	UGameplayStatics::ApplyPointDamage(
+		Target,
+		WeaponDefaultDamage,
+		Hit.TraceEnd - Hit.TraceStart,
+		Hit,
+		GetInstigatorController(),
+		this,
+		UDamageType::StaticClass()
+	);
 }
 
 void ABaseWeapon::SpawnImpactDecal(const FHitResult& Hit)
@@ -137,6 +164,15 @@ void ABaseWeapon::SpawnImpactDecal(const FHitResult& Hit)
 		DecalRotation,
 		WeaponData->DecalLifeTime
 	);
+}
+
+float ABaseWeapon::CalculateDistanceDamage(FVector OwnerLocation, FVector TargetLocation)
+{
+	float Distance = FVector::Dist(OwnerLocation, TargetLocation);
+	UE_LOG(LogWeapon, Error, TEXT("Distance : %f"), Distance);
+
+	float DistanceDamage = WeaponDefaultDamage;
+	return DistanceDamage;
 }
 
 void ABaseWeapon::Multicast_FireEffects_Implementation()
