@@ -46,7 +46,7 @@ protected:
 
 protected:
 	void HitDamage(const FHitResult& Hit);
-	void SpawnImpactDecal(const FHitResult& Hit);
+
 
 // Replicate Properties
 protected:
@@ -81,4 +81,7 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_FireSound();
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void Multicast_SpawnImpactDecal(const FHitResult& Hit);
 };

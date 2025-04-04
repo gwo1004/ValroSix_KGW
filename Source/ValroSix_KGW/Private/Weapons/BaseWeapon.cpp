@@ -82,7 +82,7 @@ void ABaseWeapon::Fire()
 
 		HitDamage(HitResult);
 		Multicast_DrawLine(FireStart, HitResult.ImpactPoint, true, HitResult.ImpactPoint);
-		SpawnImpactDecal(HitResult);
+		Multicast_SpawnImpactDecal(HitResult);
 	}
 	else
 	{
@@ -143,7 +143,7 @@ void ABaseWeapon::HitDamage(const FHitResult& Hit)
 	);
 }
 
-void ABaseWeapon::SpawnImpactDecal(const FHitResult& Hit)
+void ABaseWeapon::Multicast_SpawnImpactDecal_Implementation(const FHitResult& Hit)
 {
 	if (!WeaponData && !WeaponData->DecalEffect)
 	{
