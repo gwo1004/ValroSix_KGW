@@ -15,14 +15,19 @@ public:
 	UPlayerHealthComponent();
 	virtual void DamageHandle(float DamageAmount, AController* InstigateTarget, AActor* DamageCauser) override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetUpHealthProperty() override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category ="Stat | Shield")
+	UPROPERTY(EditDefaultsOnly, Replicated, Category ="Stat | Shield")
 	float MaxShield;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Shield")
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentShield, VisibleAnywhere, Category = "Stat | Shield")
 	float CurrentShield;
+
+protected:
+	UFUNCTION()
+	void OnRep_CurrentShield();
 };

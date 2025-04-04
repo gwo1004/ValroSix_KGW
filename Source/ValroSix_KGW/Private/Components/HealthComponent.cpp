@@ -2,6 +2,7 @@
 
 
 #include "Components/HealthComponent.h"
+#include "Net\UnrealNetwork.h"
 
 UHealthComponent::UHealthComponent()
 {
@@ -24,6 +25,14 @@ void UHealthComponent::DamageHandle(float DamageAmount, AController* InstigateTa
 	}
 }
 
+void UHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UHealthComponent, CurrentHealth);
+	DOREPLIFETIME(UHealthComponent, MaxHealth);
+}
+
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -34,4 +43,9 @@ void UHealthComponent::SetUpHealthProperty()
 	MaxHealth = 100.f;
 	CurrentHealth = MaxHealth;
 	bIsDead = false;
+}
+
+void UHealthComponent::OnRep_CurrentHealth()
+{
+	//UI Broadcast
 }

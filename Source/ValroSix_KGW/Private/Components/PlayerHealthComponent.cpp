@@ -2,6 +2,7 @@
 
 
 #include "Components/PlayerHealthComponent.h"
+#include "Net\UnrealNetwork.h"
 
 UPlayerHealthComponent::UPlayerHealthComponent()
 {
@@ -21,6 +22,14 @@ void UPlayerHealthComponent::DamageHandle(float DamageAmount, AController* Insti
 	Super::DamageHandle(DamageAmount,InstigateTarget,DamageCauser);
 }
 
+void UPlayerHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UPlayerHealthComponent, CurrentShield);
+	DOREPLIFETIME(UPlayerHealthComponent, MaxShield);
+}
+
 void UPlayerHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -32,4 +41,9 @@ void UPlayerHealthComponent::SetUpHealthProperty()
 	Super::SetUpHealthProperty();
 
 
+}
+
+void UPlayerHealthComponent::OnRep_CurrentShield()
+{
+	// Shield Broadcast
 }
