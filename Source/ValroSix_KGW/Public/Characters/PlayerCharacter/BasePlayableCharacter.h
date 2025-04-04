@@ -13,6 +13,7 @@ class UCameraComponent;
 class UInputAction;
 struct FInputActionValue;
 class UWeaponComponent;
+class UPlayerHealthComponent;
 
 UCLASS()
 class VALROSIX_KGW_API ABasePlayableCharacter : public ACharacter
@@ -29,6 +30,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,AController* EventInstigator, AActor* DamageCauser) override;
 protected:
 	//Enhanced Input Actions Function
 	UFUNCTION()
@@ -87,6 +89,10 @@ protected:
 
 	// Convert Camera Mesh Settings
 	void VisibilityMesh(const bool& IsFPSCamera);
+
+	// Health
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	UPlayerHealthComponent* HealthComponent;
 
 	// Weapons 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")

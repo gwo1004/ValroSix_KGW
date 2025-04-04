@@ -7,13 +7,31 @@ UHealthComponent::UHealthComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
+	SetUpHealthProperty();
 }
 
-void UHealthComponent::DamageHandle()
+void UHealthComponent::DamageHandle(float DamageAmount, AController* InstigateTarget, AActor* DamageCauser)
 {
+	if (bIsDead || DamageAmount <= 0.f) return;
+
+	CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, MaxHealth);
+
+	UE_LOG(LogTemp, Display, TEXT("CurrentHP : %f"), CurrentHealth);
+
+	if (CurrentHealth <= 0.f)
+	{
+		bIsDead = true;
+	}
 }
 
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void UHealthComponent::SetUpHealthProperty()
+{
+	MaxHealth = 100.f;
+	CurrentHealth = MaxHealth;
+	bIsDead = false;
 }

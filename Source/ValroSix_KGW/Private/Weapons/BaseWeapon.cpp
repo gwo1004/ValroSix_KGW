@@ -132,8 +132,6 @@ void ABaseWeapon::HitDamage(const FHitResult& Hit)
 	UE_LOG(LogWeapon, Display, TEXT("Target : %s"),*Target->GetName());
 	UE_LOG(LogWeapon, Display, TEXT("Instigator : %s"), *GetInstigatorController()->GetName());
 
-	CalculateDistanceDamage(Hit.TraceStart, Hit.ImpactPoint);
-
 	UGameplayStatics::ApplyPointDamage(
 		Target,
 		WeaponDefaultDamage,
@@ -164,15 +162,6 @@ void ABaseWeapon::SpawnImpactDecal(const FHitResult& Hit)
 		DecalRotation,
 		WeaponData->DecalLifeTime
 	);
-}
-
-float ABaseWeapon::CalculateDistanceDamage(FVector OwnerLocation, FVector TargetLocation)
-{
-	float Distance = FVector::Dist(OwnerLocation, TargetLocation);
-	UE_LOG(LogWeapon, Error, TEXT("Distance : %f"), Distance);
-
-	float DistanceDamage = WeaponDefaultDamage;
-	return DistanceDamage;
 }
 
 void ABaseWeapon::Multicast_FireEffects_Implementation()

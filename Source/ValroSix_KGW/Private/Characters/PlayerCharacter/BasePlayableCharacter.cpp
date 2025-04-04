@@ -13,6 +13,7 @@
 #include "Weapons/BaseWeapon.h"
 #include "Characters/Animations/BasePlayerAnimInstance.h"
 #include "Components/CapsuleComponent.h"
+#include "Components\PlayerHealthComponent.h"
 
 ABasePlayableCharacter::ABasePlayableCharacter()
 {
@@ -84,6 +85,20 @@ void ABasePlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 			}
 		}
 	}
+}
+
+float ABasePlayableCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	const float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	if (!HealthComponent)
+	{
+		UE_LOG(LogPlayer, Error, TEXT("HealthComponente is Null - BasePlayableCharacter.cpp"));
+		return 0;
+	}
+	HealthComponent->DamageHandle(DamageAmount, EventInstigator, DamageCauser);
+
+	return Damage;
 }
 
 void ABasePlayableCharacter::MoveForward(const FInputActionValue& Value)
@@ -247,7 +262,7 @@ void ABasePlayableCharacter::SpawnSetUpCharacterComponent()
 {
 	// Crouch
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
-	GetCharacterMovement()->CrouchedHalfHeight = 60.f;
+	GetCharacterMovement()->SetCrouchedHalfHeight(60.f);
 
 	// AirControl
 	GetCharacterMovement()->AirControl = 2.f;
@@ -263,6 +278,12 @@ void ABasePlayableCharacter::SpawnActorComponent()
 	if (!WeaponComponent)
 	{
 		UE_LOG(LogPlayer, Error, TEXT("WeaponComponent CDO Fail"));
+	}
+
+	HealthComponent = CreateDefaultSubobject<UPlayerHealthComponent>(TEXT("Health"));
+	if (!HealthComponent)
+	{
+		UE_LOG(LogPlayer, Error, TEXT("HealthComponent CDO Fail"));
 	}
 }
 

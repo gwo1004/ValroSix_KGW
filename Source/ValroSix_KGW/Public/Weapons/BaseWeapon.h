@@ -72,9 +72,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Fire")
 	float FireRange = 1000.f;
 
-private:
-	float CalculateDistanceDamage(FVector OwnerLocation, FVector TargetLocation);
-
 protected:
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_DrawLine(FVector start, FVector end, bool bHit, FVector HitPoint);

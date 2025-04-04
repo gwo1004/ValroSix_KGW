@@ -14,9 +14,21 @@ class VALROSIX_KGW_API UHealthComponent : public UActorComponent
 
 public:	
 	UHealthComponent();
+	virtual void DamageHandle(float DamageAmount, AController* InstigateTarget,AActor* DamageCauser);
 
-	virtual void DamageHandle();
 protected:
 	virtual void BeginPlay() override;
-	
+	virtual void SetUpHealthProperty();
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Health")
+	float MaxHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Health")
+	float CurrentHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat | Health")
+	bool bIsDead;
+
+
 };
