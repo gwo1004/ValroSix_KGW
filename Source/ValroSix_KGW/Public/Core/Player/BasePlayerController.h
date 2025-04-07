@@ -46,6 +46,8 @@ public:
 	UFUNCTION()
 	void UpdateCurrentIMC(UPlayerInputKeyData* CurrentDataAsset);
 
+	UFUNCTION(Client, Reliable)
+	void Client_ShowMainWidget();
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -56,4 +58,13 @@ public:
 	
 private:
 	EControlMode CurrentMode;
+
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UInGamePlayerVM> InGameWidgetClass;
+
+private:
+	UPROPERTY()
+	class UInGamePlayerVM* InGameWidget;
 };

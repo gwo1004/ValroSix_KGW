@@ -14,7 +14,16 @@ class VALROSIX_KGW_API UInGamePlayerVM : public UUserWidget
 {
 	GENERATED_BODY()
 	
-	
+protected:
+	virtual void NativeOnInitialized() override;
+	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
+
+	void CheckNullObject(UObject* CheckObject);
+
+protected:
+	UPROPERTY(meta = (BindWidget))
+	class UStatusWidget* StatusWidget;
 	
 	
 };

@@ -22,6 +22,15 @@ protected:
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
 
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerHealth(const int32& UpdateHealth);
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerShield(const int32& UpdateShield);
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerAmmo(const int32& UpdateCurrentAmmo, const int32& UpdateRemainingAmmo);
 
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))

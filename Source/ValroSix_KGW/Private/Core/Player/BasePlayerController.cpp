@@ -5,6 +5,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
 #include "Data/DataAssets/PlayerInputKeyData.h"
+#include "UI/ViewModels/Player/InGamePlayerVM.h"
 
 ABasePlayerController::ABasePlayerController()
 {
@@ -12,6 +13,8 @@ ABasePlayerController::ABasePlayerController()
 
 	ControlModeMap.Add(EControlMode::Character, FControlModeMapping());
 	ControlModeMap.Add(EControlMode::SkillPawn, FControlModeMapping());
+
+
 }
 
 void ABasePlayerController::SwitchControlMode(EControlMode Mode)
@@ -72,9 +75,24 @@ void ABasePlayerController::UpdateCurrentIMC(UPlayerInputKeyData* CurrentDataAss
 	}
 }
 
+void ABasePlayerController::Client_ShowMainWidget_Implementation()
+{
+	if (IsLocalController() && InGameWidgetClass)
+	{
+		InGameWidget = CreateWidget<UInGamePlayerVM>(this, InGameWidgetClass);
+		if (InGameWidget)
+		{
+			InGameWidget->AddToViewport();
+		}
+	}
+
+}
+
 void ABasePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Client_ShowMainWidget();
 }
 
 void ABasePlayerController::SetupInputComponent()
