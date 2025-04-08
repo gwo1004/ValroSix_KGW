@@ -21,7 +21,6 @@ void UPlayerHealthComponent::DamageHandle(float DamageAmount, AController* Insti
 		CurrentShield -= AbsorbtionDamage;
 		DamageAmount -= AbsorbtionDamage;
 	}
-	UE_LOG(LogTemp, Display, TEXT("PlayerHealth Component Damage Handle Call : %f"),DamageAmount);
 
 	Super::DamageHandle(DamageAmount,InstigateTarget,DamageCauser);
 }
@@ -49,7 +48,5 @@ void UPlayerHealthComponent::SetUpHealthProperty()
 
 void UPlayerHealthComponent::OnRep_CurrentShield()
 {
-	// Shield Broadcast
-	UE_LOG(LogTemp, Display, TEXT("OnRep Current Shield Call Test"));
 	OnShieldChanged.Broadcast(CurrentShield);
 }

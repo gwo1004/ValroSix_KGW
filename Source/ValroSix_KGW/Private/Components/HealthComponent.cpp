@@ -8,31 +8,20 @@ UHealthComponent::UHealthComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 	SetIsReplicatedByDefault(true);
-//	SetUpHealthProperty();
 }
 
 void UHealthComponent::DamageHandle(float DamageAmount, AController* InstigateTarget, AActor* DamageCauser)
 {
 	if (bIsDead || DamageAmount <= 0.f) return;
 
-	//if (GetOwner()->HasAuthority())
-	//{
-	//	//CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, MaxHealth);
-
-	//	CurrentHealth -= DamageAmount;
-	//	UE_LOG(LogTemp, Display, TEXT("CurrentHP : %f"), CurrentHealth);
-
-	//	if (CurrentHealth <= 0.f)
-	//	{
-	//		bIsDead = true;
-	//	}
-	//}
-
 	if (GetOwner()->HasAuthority())
 	{
-		float Old = CurrentHealth;
 		CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, MaxHealth);
-		UE_LOG(LogTemp, Warning, TEXT("Server CurrentHealth changed: %f → %f"), Old, CurrentHealth);
+
+		if (CurrentHealth <= 0.f)
+		{
+			bIsDead = true;
+		}
 	}
 }
 
@@ -63,8 +52,5 @@ void UHealthComponent::SetUpHealthProperty()
 
 void UHealthComponent::OnRep_CurrentHealth()
 {
-	//UI Broadcast
-	UE_LOG(LogTemp, Display, TEXT("OnRepCallTest"));
 	OnHealthChanged.Broadcast(CurrentHealth);
-
 }
