@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BaseWeapon.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangedAmmo, int32, AmmoValue);
+
 UCLASS()
 class VALROSIX_KGW_API ABaseWeapon : public AActor
 {
@@ -31,6 +33,7 @@ public:
 protected:
 	virtual void InitializedWeaponData();
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void HitDamage(const FHitResult& Hit);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
@@ -44,16 +47,20 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Socket Offset")
 	FRotator SocketRotationOffset;
 
+//	Delegates
 protected:
-	void HitDamage(const FHitResult& Hit);
+	UPROPERTY(BlueprintAssignable, Category = "UI | Ammo")
+	FOnChangedAmmo OnCurrentAmmoChanged;
 
+	UPROPERTY(BlueprintAssignable, Category = "UI | Ammo")
+	FOnChangedAmmo OnReserveAmmoChanged;
 
 // Replicate Properties
 protected:
-	UPROPERTY(VisibleAnywhere, Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentAmmo)
 	int32 CurrentAmmo;
 
-	UPROPERTY(VisibleAnywhere, Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentReserveAmmo)
 	int32 CurrentReserveAmmo;
 
 	UPROPERTY(VisibleAnywhere, Replicated)
@@ -73,6 +80,12 @@ protected:
 	float FireRange = 1000.f;
 
 protected:
+	UFUNCTION()
+	void OnRep_CurrentAmmo();
+
+	UFUNCTION()
+	void OnRep_CurrentReserveAmmo();
+
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_DrawLine(FVector start, FVector end, bool bHit, FVector HitPoint);
 

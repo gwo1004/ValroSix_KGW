@@ -143,6 +143,15 @@ void ABaseWeapon::HitDamage(const FHitResult& Hit)
 	);
 }
 
+void ABaseWeapon::OnRep_CurrentAmmo()
+{
+	
+}
+
+void ABaseWeapon::OnRep_CurrentReserveAmmo()
+{
+}
+
 void ABaseWeapon::Multicast_SpawnImpactDecal_Implementation(const FHitResult& Hit)
 {
 	if (!WeaponData && !WeaponData->DecalEffect)
