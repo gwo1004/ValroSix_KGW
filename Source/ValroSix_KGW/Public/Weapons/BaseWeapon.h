@@ -24,11 +24,15 @@ public:
 	void Server_Fire();
 
 	virtual void Fire();
+	virtual void Reload();
+	virtual void ConsumeAmmo();
 
 	bool GetIsAuto() const { return bIsAuto; }
 	float GetFireRate() const { return CurrentFireRate; }
 	FVector GetSocketOffset() const { return SocketOffset; }
 	FRotator GetSocketRotation() const { return SocketRotationOffset; }
+	FOnChangedAmmo GetCurrentAmmoDele() const { return OnCurrentAmmoChanged; }
+	FOnChangedAmmo GetReserveAmmoDele() const { return OnReserveAmmoChanged; }
 
 protected:
 	virtual void InitializedWeaponData();

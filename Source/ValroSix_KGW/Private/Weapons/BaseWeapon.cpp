@@ -68,7 +68,8 @@ void ABaseWeapon::Fire()
 		HitResult, FireStart, FireEnd, ECC_Visibility, QueryParams
 	);
 
-	--CurrentAmmo;
+	ConsumeAmmo();
+
 	UE_LOG(LogWeapon, Warning, TEXT("CurrentAmmo : %d"), CurrentAmmo);
 
 	if (bHit)
@@ -88,6 +89,27 @@ void ABaseWeapon::Fire()
 	{
 		Multicast_DrawLine(FireStart, FireEnd, false, FVector::ZeroVector);
 	}
+}
+
+void ABaseWeapon::Reload()
+{
+	if (!HasAuthority()) return;
+	int32 ConsumeReserveAmmo = WeaponData->MagazineSize - CurrentAmmo;
+
+	if (CurrentAmmo >= WeaponData->MagazineSize) return;
+	if (ConsumeReserveAmmo <= 0 || CurrentReserveAmmo <= 0) return;
+
+	int32 ConsumeReloadAmmo = FMath::Min(CurrentReserveAmmo, ConsumeReserveAmmo);
+
+	CurrentAmmo += ConsumeReloadAmmo;
+	CurrentReserveAmmo -= ConsumeReloadAmmo;
+}
+
+void ABaseWeapon::ConsumeAmmo()
+{
+	if (!HasAuthority()) return;
+	
+	CurrentAmmo = FMath::Max(CurrentAmmo - 1, 0);
 }
 
 void ABaseWeapon::InitializedWeaponData()
@@ -145,11 +167,12 @@ void ABaseWeapon::HitDamage(const FHitResult& Hit)
 
 void ABaseWeapon::OnRep_CurrentAmmo()
 {
-	
+	OnCurrentAmmoChanged.Broadcast(CurrentAmmo);
 }
 
 void ABaseWeapon::OnRep_CurrentReserveAmmo()
 {
+	OnReserveAmmoChanged.Broadcast(CurrentReserveAmmo);
 }
 
 void ABaseWeapon::Multicast_SpawnImpactDecal_Implementation(const FHitResult& Hit)
