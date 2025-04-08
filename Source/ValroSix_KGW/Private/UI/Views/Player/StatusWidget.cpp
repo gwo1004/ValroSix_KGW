@@ -27,6 +27,11 @@ void UStatusWidget::NativeDestruct()
 
 void UStatusWidget::SetPlayerHealth(const int32& UpdateHealth)
 {
+	if (CurrentHealth)
+	{
+		CurrentHealth->SetText(FText::AsNumber(UpdateHealth));
+	}
+
 }
 
 void UStatusWidget::SetPlayerShield(const int32& UpdateShield)

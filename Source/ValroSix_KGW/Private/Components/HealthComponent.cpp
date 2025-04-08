@@ -7,21 +7,32 @@
 UHealthComponent::UHealthComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
-
-	SetUpHealthProperty();
+	SetIsReplicatedByDefault(true);
+//	SetUpHealthProperty();
 }
 
 void UHealthComponent::DamageHandle(float DamageAmount, AController* InstigateTarget, AActor* DamageCauser)
 {
 	if (bIsDead || DamageAmount <= 0.f) return;
 
-	CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, MaxHealth);
+	//if (GetOwner()->HasAuthority())
+	//{
+	//	//CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, MaxHealth);
 
-	UE_LOG(LogTemp, Display, TEXT("CurrentHP : %f"), CurrentHealth);
+	//	CurrentHealth -= DamageAmount;
+	//	UE_LOG(LogTemp, Display, TEXT("CurrentHP : %f"), CurrentHealth);
 
-	if (CurrentHealth <= 0.f)
+	//	if (CurrentHealth <= 0.f)
+	//	{
+	//		bIsDead = true;
+	//	}
+	//}
+
+	if (GetOwner()->HasAuthority())
 	{
-		bIsDead = true;
+		float Old = CurrentHealth;
+		CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, MaxHealth);
+		UE_LOG(LogTemp, Warning, TEXT("Server CurrentHealth changed: %f → %f"), Old, CurrentHealth);
 	}
 }
 
@@ -36,6 +47,11 @@ void UHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (GetOwner()->HasAuthority())
+	{
+		SetUpHealthProperty();
+	}
 }
 
 void UHealthComponent::SetUpHealthProperty()
@@ -48,4 +64,7 @@ void UHealthComponent::SetUpHealthProperty()
 void UHealthComponent::OnRep_CurrentHealth()
 {
 	//UI Broadcast
+	UE_LOG(LogTemp, Display, TEXT("OnRepCallTest"));
+	OnHealthChanged.Broadcast(CurrentHealth);
+
 }

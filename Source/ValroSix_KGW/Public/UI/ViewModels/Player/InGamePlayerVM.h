@@ -20,6 +20,10 @@ protected:
 	virtual void NativeDestruct() override;
 
 	void CheckNullObject(UObject* CheckObject);
+	void DelegateBinding();
+
+	UFUNCTION()
+	void OnPlayerHealthBinding(float CurrentHealth);
 
 protected:
 	UPROPERTY(meta = (BindWidget))

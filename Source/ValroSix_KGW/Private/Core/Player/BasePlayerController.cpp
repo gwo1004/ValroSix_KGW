@@ -82,6 +82,7 @@ void ABasePlayerController::Client_ShowMainWidget_Implementation()
 		InGameWidget = CreateWidget<UInGamePlayerVM>(this, InGameWidgetClass);
 		if (InGameWidget)
 		{
+			InGameWidget->SetOwningPlayer(this);
 			InGameWidget->AddToViewport();
 		}
 	}

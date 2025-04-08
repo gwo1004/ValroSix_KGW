@@ -13,6 +13,7 @@ class VALROSIX_KGW_API UPlayerHealthComponent : public UHealthComponent
 	
 public:
 	UPlayerHealthComponent();
+
 	virtual void DamageHandle(float DamageAmount, AController* InstigateTarget, AActor* DamageCauser) override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -30,4 +31,8 @@ protected:
 protected:
 	UFUNCTION()
 	void OnRep_CurrentShield();
+
+public:
+	UPROPERTY(BlueprintAssignable, Category = "UI Events")
+	FOnChangeCurrentValue OnShieldChanged;
 };

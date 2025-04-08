@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeCurrentValue, float, CurrentValue);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class VALROSIX_KGW_API UHealthComponent : public UActorComponent
@@ -14,6 +15,7 @@ class VALROSIX_KGW_API UHealthComponent : public UActorComponent
 
 public:	
 	UHealthComponent();
+
 	virtual void DamageHandle(float DamageAmount, AController* InstigateTarget,AActor* DamageCauser);
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -36,4 +38,7 @@ protected:
 	UFUNCTION()
 	void OnRep_CurrentHealth();
 
+public:
+	UPROPERTY(BlueprintAssignable, Category = "UI Events")
+	FOnChangeCurrentValue OnHealthChanged;
 };

@@ -23,6 +23,8 @@ ABasePlayableCharacter::ABasePlayableCharacter()
 	SpawnSetUpCharacterComponent();
 	SpawnActorComponent();
 
+	SetReplicates(true);
+	SetReplicateMovement(true);
 }
 
 void ABasePlayableCharacter::BeginPlay()
