@@ -30,7 +30,10 @@ public:
 	void SetPlayerShield(const int32& UpdateShield);
 
 	UFUNCTION(BlueprintCallable)
-	void SetPlayerAmmo(const int32& UpdateCurrentAmmo, const int32& UpdateRemainingAmmo);
+	void SetWeaponCurrentAmmo(const int32& UpdateCurrentAmmo);
+
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponReserveAmmo(const int32& UpdateReserveAmmo);
 
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))

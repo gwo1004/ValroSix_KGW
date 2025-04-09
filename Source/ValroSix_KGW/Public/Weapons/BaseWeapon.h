@@ -31,8 +31,8 @@ public:
 	float GetFireRate() const { return CurrentFireRate; }
 	FVector GetSocketOffset() const { return SocketOffset; }
 	FRotator GetSocketRotation() const { return SocketRotationOffset; }
-	FOnChangedAmmo GetCurrentAmmoDele() const { return OnCurrentAmmoChanged; }
-	FOnChangedAmmo GetReserveAmmoDele() const { return OnReserveAmmoChanged; }
+	int32 GetCurrentAmmo() const { return CurrentAmmo; }
+	int32 GetReserveAmmo() const { return CurrentReserveAmmo; }
 
 protected:
 	virtual void InitializedWeaponData();
@@ -52,7 +52,7 @@ protected:
 	FRotator SocketRotationOffset;
 
 //	Delegates
-protected:
+public:
 	UPROPERTY(BlueprintAssignable, Category = "UI | Ammo")
 	FOnChangedAmmo OnCurrentAmmoChanged;
 

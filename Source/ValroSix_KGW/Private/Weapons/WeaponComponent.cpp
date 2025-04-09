@@ -14,6 +14,7 @@ UWeaponComponent::UWeaponComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 	CurrentWeaponType = EWeaponType::Unarmed;
 	CurrentWeapon = nullptr;
+	PrevWeapon = nullptr;
 	bCanFire = true;
 	WeaponAttachSocketName = TEXT("WeaponSocket");
 	SetIsReplicatedByDefault(true);
@@ -86,6 +87,7 @@ void UWeaponComponent::Server_SwitchWeapon_Implementation(EWeaponType Slot)
 
 	if (CurrentWeapon)
 	{
+		PrevWeapon = CurrentWeapon;
 		UnEquipWeapon();
 	}
 
@@ -148,6 +150,9 @@ void UWeaponComponent::EndFireWeapon()
 
 void UWeaponComponent::OnRep_CurrentWeapon()
 {
+	ABaseWeapon* OldWeapon = PrevWeapon; 
+	PrevWeapon = CurrentWeapon;         
+
 	if (!CurrentWeapon) return;
 
 	ACharacter* TargetOwner = Cast<ACharacter>(GetOwner());
@@ -160,6 +165,8 @@ void UWeaponComponent::OnRep_CurrentWeapon()
 	CurrentWeapon->SetActorRelativeLocation(CurrentWeapon->GetSocketOffset());
 	CurrentWeapon->SetActorRelativeRotation(CurrentWeapon->GetSocketRotation());
 	CurrentWeapon->SetActorEnableCollision(false);
+
+	OnChangedCurrentWeapon.Broadcast(OldWeapon, CurrentWeapon);
 
 	UE_LOG(LogTemp, Warning, TEXT("[Client] Replicated weapon attached: %s"), *CurrentWeapon->GetName());
 }

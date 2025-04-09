@@ -7,6 +7,7 @@
 #include "Core/Player/BasePlayerController.h"
 #include "Characters/PlayerCharacter/BasePlayableCharacter.h"
 #include "Components/PlayerHealthComponent.h"
+#include "Weapons/WeaponComponent.h"
 
 void UInGamePlayerVM::NativeOnInitialized()
 {
@@ -54,7 +55,11 @@ void UInGamePlayerVM::DelegateBinding()
 	if (ABasePlayableCharacter* CurrentPlayer = Cast<ABasePlayableCharacter>(PC->GetPawn()))
 	{
 		CurrentPlayer->GetHealthComponent()->OnHealthChanged.AddDynamic(this, &UInGamePlayerVM::OnPlayerHealthBinding);
-		OnPlayerHealthBinding(100.f);
+		CurrentPlayer->GetHealthComponent()->OnShieldChanged.AddDynamic(this, &UInGamePlayerVM::OnPlayerShieldBinding);
+		OnPlayerHealthBinding(CurrentPlayer->GetHealthComponent()->GetMaxHealth());
+		OnPlayerShieldBinding(CurrentPlayer->GetHealthComponent()->GetCurrentShield());
+
+		CurrentPlayer->GetWeaponComponent()->OnChangedCurrentWeapon.AddDynamic(this, &UInGamePlayerVM::OnWeaponChanged);
 	}
 }
 
@@ -62,7 +67,43 @@ void UInGamePlayerVM::OnPlayerHealthBinding(float CurrentHealth)
 {
 	if (!StatusWidget) return;
 
-	UE_LOG(LogUI, Warning, TEXT("Health updated: %f"), CurrentHealth);
-
 	StatusWidget->SetPlayerHealth((int32)CurrentHealth);
+}
+
+void UInGamePlayerVM::OnPlayerShieldBinding(float CurrentShield)
+{
+	if (!StatusWidget) return;
+
+	StatusWidget->SetPlayerShield((int32)CurrentShield);
+}
+
+void UInGamePlayerVM::OnWeaponChanged(ABaseWeapon* PrevWeapon, ABaseWeapon* CurrentWeapon)
+{
+	if (PrevWeapon)
+	{
+		PrevWeapon->OnCurrentAmmoChanged.RemoveDynamic(this, &UInGamePlayerVM::OnWeaponCurrentAmmo);
+		PrevWeapon->OnReserveAmmoChanged.RemoveDynamic(this, &UInGamePlayerVM::OnWeaponReserveAmmo);
+	}
+
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->OnCurrentAmmoChanged.AddDynamic(this, &UInGamePlayerVM::OnWeaponCurrentAmmo);
+		CurrentWeapon->OnReserveAmmoChanged.AddDynamic(this, &UInGamePlayerVM::OnWeaponReserveAmmo);
+		OnWeaponCurrentAmmo(CurrentWeapon->GetCurrentAmmo());
+		OnWeaponReserveAmmo(CurrentWeapon->GetReserveAmmo());
+	}
+}
+
+void UInGamePlayerVM::OnWeaponCurrentAmmo(int32 CurrentAmmo)
+{
+	if (!StatusWidget) return;
+
+	StatusWidget->SetWeaponCurrentAmmo(CurrentAmmo);
+}
+
+void UInGamePlayerVM::OnWeaponReserveAmmo(int32 ReserveAmmo)
+{
+	if (!StatusWidget) return;
+
+	StatusWidget->SetWeaponReserveAmmo(ReserveAmmo);
 }

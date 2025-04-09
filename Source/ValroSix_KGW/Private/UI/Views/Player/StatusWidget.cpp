@@ -31,13 +31,28 @@ void UStatusWidget::SetPlayerHealth(const int32& UpdateHealth)
 	{
 		CurrentHealth->SetText(FText::AsNumber(UpdateHealth));
 	}
-
 }
 
 void UStatusWidget::SetPlayerShield(const int32& UpdateShield)
 {
+	if (CurrentShield)
+	{
+		CurrentShield->SetText(FText::AsNumber(UpdateShield));
+	}
 }
 
-void UStatusWidget::SetPlayerAmmo(const int32& UpdateCurrentAmmo, const int32& UpdateRemainingAmmo)
+void UStatusWidget::SetWeaponCurrentAmmo(const int32& UpdateCurrentAmmo)
 {
+	if (CurrentAmmo)
+	{
+		CurrentAmmo->SetText(FText::AsNumber(UpdateCurrentAmmo));
+	}
+}
+
+void UStatusWidget::SetWeaponReserveAmmo(const int32& UpdateReserveAmmo)
+{
+	if (RemainingAmmo)
+	{
+		RemainingAmmo->SetText(FText::AsNumber(UpdateReserveAmmo));
+	}
 }

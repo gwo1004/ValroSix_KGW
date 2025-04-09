@@ -25,6 +25,18 @@ protected:
 	UFUNCTION()
 	void OnPlayerHealthBinding(float CurrentHealth);
 
+	UFUNCTION()
+	void OnPlayerShieldBinding(float CurrentShield);
+
+	UFUNCTION()
+	void OnWeaponChanged(class ABaseWeapon* PrevWeapon, class ABaseWeapon* CurrentWeapon);
+
+	UFUNCTION()
+	void OnWeaponCurrentAmmo(int32 CurrentAmmo);
+
+	UFUNCTION()
+	void OnWeaponReserveAmmo(int32 ReserveAmmo);
+
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class UStatusWidget* StatusWidget;
