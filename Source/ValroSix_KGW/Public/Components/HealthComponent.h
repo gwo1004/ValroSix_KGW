@@ -17,8 +17,9 @@ public:
 	UHealthComponent();
 
 	virtual void DamageHandle(float DamageAmount, AController* InstigateTarget,AActor* DamageCauser);
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	float GetMaxHealth() const { return MaxHealth; }
 
 protected:
 	virtual void BeginPlay() override;

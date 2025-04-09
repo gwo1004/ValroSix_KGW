@@ -15,8 +15,9 @@ public:
 	UPlayerHealthComponent();
 
 	virtual void DamageHandle(float DamageAmount, AController* InstigateTarget, AActor* DamageCauser) override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	float GetCurrentShield() const { return CurrentShield; }
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetUpHealthProperty() override;
