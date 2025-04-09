@@ -41,5 +41,6 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UStatusWidget* StatusWidget;
 	
-	
+	UPROPERTY(meta = (BindWidget))
+	class URoundStateWidget* RoundStateWidget;
 };

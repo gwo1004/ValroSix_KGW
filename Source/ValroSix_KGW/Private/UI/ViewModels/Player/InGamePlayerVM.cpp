@@ -4,6 +4,7 @@
 #include "UI/ViewModels/Player/InGamePlayerVM.h"
 #include "Utility/LoggingCategories.h"
 #include "UI/Views/Player/StatusWidget.h"
+#include "UI/Views/InGame/RoundStateWidget.h"
 #include "Core/Player/BasePlayerController.h"
 #include "Characters/PlayerCharacter/BasePlayableCharacter.h"
 #include "Components/PlayerHealthComponent.h"
