@@ -86,14 +86,23 @@ void ABasePlayerController::Client_ShowMainWidget_Implementation()
 			InGameWidget->AddToViewport();
 		}
 	}
-
 }
 
 void ABasePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Client_ShowMainWidget();
+	if (IsLocalController())
+	{
+		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ABasePlayerController::Client_ShowMainWidget);
+	}
+}
+
+void ABasePlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+
 }
 
 void ABasePlayerController::SetupInputComponent()

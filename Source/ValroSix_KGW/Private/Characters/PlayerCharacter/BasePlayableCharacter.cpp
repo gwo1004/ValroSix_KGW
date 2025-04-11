@@ -276,6 +276,8 @@ void ABasePlayableCharacter::SpawnSetUpCharacterComponent()
 
 void ABasePlayableCharacter::SpawnActorComponent()
 {
+	GetMovementComponent()->SetIsReplicated(true);
+
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>(TEXT("Weapon"));
 	if (!WeaponComponent)
 	{

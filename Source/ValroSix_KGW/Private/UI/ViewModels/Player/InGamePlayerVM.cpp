@@ -5,6 +5,7 @@
 #include "Utility/LoggingCategories.h"
 #include "UI/Views/Player/StatusWidget.h"
 #include "UI/Views/InGame/RoundStateWidget.h"
+#include "Core/GameMode/NormalGameState.h"
 #include "Core/Player/BasePlayerController.h"
 #include "Characters/PlayerCharacter/BasePlayableCharacter.h"
 #include "Components/PlayerHealthComponent.h"
@@ -22,6 +23,7 @@ void UInGamePlayerVM::NativeConstruct()
 	Super::NativeConstruct();
 
 	CheckNullObject(StatusWidget);
+	CheckNullObject(RoundStateWidget);
 
 	DelegateBinding();
 }
@@ -61,6 +63,12 @@ void UInGamePlayerVM::DelegateBinding()
 		OnPlayerShieldBinding(CurrentPlayer->GetHealthComponent()->GetCurrentShield());
 
 		CurrentPlayer->GetWeaponComponent()->OnChangedCurrentWeapon.AddDynamic(this, &UInGamePlayerVM::OnWeaponChanged);
+	}
+
+	if (ANormalGameState* CurrentGameState = Cast<ANormalGameState>(PC->GetWorld()->GetGameState()))
+	{
+		CurrentGameState->OnTimeChanged.AddDynamic(this, &UInGamePlayerVM::OnRoundTimerBinding);
+		OnRoundTimerBinding(10);
 	}
 }
 
@@ -107,4 +115,12 @@ void UInGamePlayerVM::OnWeaponReserveAmmo(int32 ReserveAmmo)
 	if (!StatusWidget) return;
 
 	StatusWidget->SetWeaponReserveAmmo(ReserveAmmo);
+}
+
+void UInGamePlayerVM::OnRoundTimerBinding(int32 RoundTime)
+{
+	if (!RoundStateWidget) return;
+	
+	UE_LOG(LogUI, Warning, TEXT("RoundTime Func Call Test"));
+	RoundStateWidget->SetRoundStateTime(RoundTime);
 }

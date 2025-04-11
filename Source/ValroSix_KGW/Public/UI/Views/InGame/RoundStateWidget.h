@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+class UTextBlock;
+
 UCLASS()
 class VALROSIX_KGW_API URoundStateWidget : public UUserWidget
 {
@@ -19,6 +22,11 @@ protected:
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
 	
-	
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetRoundStateTime(const int32& RoundTime);
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* TimeText;
 	
 };

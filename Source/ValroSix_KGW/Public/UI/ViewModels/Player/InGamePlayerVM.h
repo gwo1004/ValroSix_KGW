@@ -20,8 +20,9 @@ protected:
 	virtual void NativeDestruct() override;
 
 	void CheckNullObject(UObject* CheckObject);
+public:
 	void DelegateBinding();
-
+protected:
 	UFUNCTION()
 	void OnPlayerHealthBinding(float CurrentHealth);
 
@@ -37,6 +38,8 @@ protected:
 	UFUNCTION()
 	void OnWeaponReserveAmmo(int32 ReserveAmmo);
 
+	UFUNCTION()
+	void OnRoundTimerBinding(int32 RoundTime);
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class UStatusWidget* StatusWidget;
