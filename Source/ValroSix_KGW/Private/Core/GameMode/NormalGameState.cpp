@@ -7,7 +7,9 @@
 
 ANormalGameState::ANormalGameState()
 {
-	CountdownTime = 0;
+	CountdownTime = 0.f;
+	CountdownStartTime = 0.f;
+	DurationTime = 0.f;
 	RoundState = EGameRoundState::Preparation;
 	bReplicates = true;
 	bAlwaysRelevant = true;
@@ -20,18 +22,35 @@ void ANormalGameState::OnRep_RoundState()
 	OnTimeChanged.Broadcast(CountdownTime);
 }
 
-void ANormalGameState::StartCountDown(int32 Duration)
+void ANormalGameState::StartCountDown(float Duration)
 {
-	UE_LOG(LogTemp, Error, TEXT("Duration Call Text : %d"), Duration);
-	CountdownTime = Duration;
-	GetWorldTimerManager().SetTimer(CountDownTimer, this, &ANormalGameState::TickCountDown, 1.0f, true);
+	DurationTime = Duration;
+	CountdownStartTime = GetWorld()->GetTimeSeconds();
+
+	GetWorldTimerManager().SetTimer(CountDownTimer, this, &ANormalGameState::TickCountDown, 0.05f, true);
 }
 
 void ANormalGameState::TickCountDown()
 {
-	UE_LOG(LogTemp, Error, TEXT("Tick CountDown Text : %d"), CountdownTime);
-	CountdownTime--;
-	if (CountdownTime <= 0)
+	//CountdownTime--;
+	//if (CountdownTime <= 0)
+	//{
+	//	GetWorldTimerManager().ClearTimer(CountDownTimer);
+
+	//	if (HasAuthority())
+	//	{
+	//		if (ANormalGameMode* GM = Cast<ANormalGameMode>(GetWorld()->GetAuthGameMode()))
+	//		{
+	//			GM->OnCountDownFinished();
+	//		}
+
+	//	}
+	//}
+
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+	CountdownTime = FMath::Clamp(DurationTime - (CurrentTime - CountdownStartTime), 0.f, DurationTime);
+
+	if (CountdownTime <= 0.f)
 	{
 		GetWorldTimerManager().ClearTimer(CountDownTimer);
 

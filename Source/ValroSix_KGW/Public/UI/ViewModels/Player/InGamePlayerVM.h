@@ -39,7 +39,7 @@ protected:
 	void OnWeaponReserveAmmo(int32 ReserveAmmo);
 
 	UFUNCTION()
-	void OnRoundTimerBinding(int32 RoundTime);
+	void OnRoundTimerBinding(float RoundTime);
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class UStatusWidget* StatusWidget;

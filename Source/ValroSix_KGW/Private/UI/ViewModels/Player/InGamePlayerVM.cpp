@@ -68,7 +68,6 @@ void UInGamePlayerVM::DelegateBinding()
 	if (ANormalGameState* CurrentGameState = Cast<ANormalGameState>(PC->GetWorld()->GetGameState()))
 	{
 		CurrentGameState->OnTimeChanged.AddDynamic(this, &UInGamePlayerVM::OnRoundTimerBinding);
-		OnRoundTimerBinding(10);
 	}
 }
 
@@ -117,10 +116,9 @@ void UInGamePlayerVM::OnWeaponReserveAmmo(int32 ReserveAmmo)
 	StatusWidget->SetWeaponReserveAmmo(ReserveAmmo);
 }
 
-void UInGamePlayerVM::OnRoundTimerBinding(int32 RoundTime)
+void UInGamePlayerVM::OnRoundTimerBinding(float RoundTime)
 {
 	if (!RoundStateWidget) return;
 	
-	UE_LOG(LogUI, Warning, TEXT("RoundTime Func Call Test"));
 	RoundStateWidget->SetRoundStateTime(RoundTime);
 }

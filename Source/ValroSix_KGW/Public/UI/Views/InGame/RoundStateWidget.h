@@ -24,7 +24,7 @@ protected:
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetRoundStateTime(const int32& RoundTime);
+	void SetRoundStateTime(const float& RoundTime);
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* TimeText;
