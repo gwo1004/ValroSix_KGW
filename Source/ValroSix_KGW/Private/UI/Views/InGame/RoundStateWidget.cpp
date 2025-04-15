@@ -23,25 +23,19 @@ void URoundStateWidget::SetRoundStateTime(const float& RoundTime)
 {
 	if (!TimeText) return;
 
+	int TotalTime = FMath::FloorToInt(RoundTime);
+
 	if (RoundTime <= 10.f)
 	{
-		int32 Sec = FMath::FloorToInt(RoundTime);
+		int32 Sec = TotalTime;
 		int32 MSec = FMath::RoundToInt((RoundTime - Sec) * 100.f);
 		TimeText->SetText(FText::FromString(FString::Printf(TEXT("%d:%02d"), Sec, MSec)));
 	}
 	else
 	{
-		int TotalTime = FMath::FloorToInt(RoundTime);
+
 		int32 RoundMinutes = TotalTime / 60;
 		int32 RoundSeconds = TotalTime % 60;
 		TimeText->SetText(FText::FromString(FString::Printf(TEXT("%d:%02d"), RoundMinutes, RoundSeconds)));
 	}
-
-
-	
-	//if (TimeText)
-	//{
-	//	FString FormattedString = FString::Printf(TEXT("%d:%02d"), RoundMinutes, RoundSeconds);
-	//	TimeText->SetText(FText::FromString(FormattedString));
-	//}
 }

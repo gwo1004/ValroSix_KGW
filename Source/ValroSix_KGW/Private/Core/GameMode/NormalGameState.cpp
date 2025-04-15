@@ -14,7 +14,6 @@ ANormalGameState::ANormalGameState()
 	bReplicates = true;
 	bAlwaysRelevant = true;
 	bNetLoadOnClient = true;
-
 }
 
 void ANormalGameState::OnRep_RoundState()
@@ -32,21 +31,6 @@ void ANormalGameState::StartCountDown(float Duration)
 
 void ANormalGameState::TickCountDown()
 {
-	//CountdownTime--;
-	//if (CountdownTime <= 0)
-	//{
-	//	GetWorldTimerManager().ClearTimer(CountDownTimer);
-
-	//	if (HasAuthority())
-	//	{
-	//		if (ANormalGameMode* GM = Cast<ANormalGameMode>(GetWorld()->GetAuthGameMode()))
-	//		{
-	//			GM->OnCountDownFinished();
-	//		}
-
-	//	}
-	//}
-
 	float CurrentTime = GetWorld()->GetTimeSeconds();
 	CountdownTime = FMath::Clamp(DurationTime - (CurrentTime - CountdownStartTime), 0.f, DurationTime);
 

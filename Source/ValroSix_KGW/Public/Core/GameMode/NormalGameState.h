@@ -11,6 +11,15 @@
  */
 
 UENUM(BlueprintType)
+enum class EGameTeam : uint8
+{
+	TeamAttacker	UMETA(DisplayName = "Attack Team"),
+	TeamDefencer	UMETA(DisplayName = "Defence Team"),
+	TeamObserver	UMETA(DisplayName = "Observer Team"),
+	TeamPersonal	UMETA(DisplayName = "Personal Team")
+};
+
+UENUM(BlueprintType)
 enum class EGameRoundState : uint8
 {
 	Preparation		UMETA(DisplayName = "Round Preparation"),
@@ -29,28 +38,30 @@ class VALROSIX_KGW_API ANormalGameState : public AGameState
 public:
 	ANormalGameState();
 
+	UFUNCTION(BlueprintCallable)
+	void StartCountDown(float Duration);
+
+public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	EGameRoundState RoundState;
 
+	UPROPERTY(BlueprintAssignable, Category = "UI | Events")
+	FOnChangedTime OnTimeChanged;
+
+protected:
 	UFUNCTION()
 	void OnRep_RoundState();
 
 	UPROPERTY(ReplicatedUsing = OnRep_RoundState, BlueprintReadOnly)
 	float CountdownTime;
-
-	float DurationTime;
 	float CountdownStartTime;
-
+	float DurationTime;
 	FTimerHandle CountDownTimer;
-
-	UFUNCTION(BlueprintCallable)
-	void StartCountDown(float Duration);
 
 	UFUNCTION()
 	void TickCountDown();
 	
-	UPROPERTY(BlueprintAssignable, Category = "UI | Events")
-	FOnChangedTime OnTimeChanged;
+
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
