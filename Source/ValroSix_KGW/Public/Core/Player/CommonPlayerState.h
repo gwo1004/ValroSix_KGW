@@ -9,11 +9,24 @@
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class EGameTeam : uint8
+{
+	TeamAttacker	UMETA(DisplayName = "Attack Team"),
+	TeamDefencer	UMETA(DisplayName = "Defence Team"),
+	TeamPersonal	UMETA(DisplayName = "Personal Team"),
+	TeamNotSelect	UMETA(DisplayName = "Not Setting Team")
+};
+
 UCLASS()
 class VALROSIX_KGW_API ACommonPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	
+public:
+	ACommonPlayerState();
+	 
 	
 	
 	

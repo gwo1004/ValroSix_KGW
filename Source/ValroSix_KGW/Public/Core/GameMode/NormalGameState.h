@@ -11,15 +11,6 @@
  */
 
 UENUM(BlueprintType)
-enum class EGameTeam : uint8
-{
-	TeamAttacker	UMETA(DisplayName = "Attack Team"),
-	TeamDefencer	UMETA(DisplayName = "Defence Team"),
-	TeamObserver	UMETA(DisplayName = "Observer Team"),
-	TeamPersonal	UMETA(DisplayName = "Personal Team")
-};
-
-UENUM(BlueprintType)
 enum class EGameRoundState : uint8
 {
 	Preparation		UMETA(DisplayName = "Round Preparation"),
