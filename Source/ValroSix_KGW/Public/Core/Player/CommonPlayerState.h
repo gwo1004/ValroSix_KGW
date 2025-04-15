@@ -25,7 +25,7 @@ class VALROSIX_KGW_API ACommonPlayerState : public APlayerState
 	GENERATED_BODY()
 	
 public:
-	ACommonPlayerState();
+	//ACommonPlayerState();
 	 
 	
 	
