@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "Data\DataAssets\BaseItemDataAsset.h"
 #include "WeaponDataAsset.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class VALROSIX_KGW_API UWeaponDataAsset : public UPrimaryDataAsset
+class VALROSIX_KGW_API UWeaponDataAsset : public UBaseItemDataAsset //public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 	

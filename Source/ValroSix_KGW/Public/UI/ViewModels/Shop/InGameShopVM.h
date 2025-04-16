@@ -15,6 +15,4 @@ class VALROSIX_KGW_API UInGameShopVM : public UUserWidget
 	GENERATED_BODY()
 	
 	
-	
-	
 };

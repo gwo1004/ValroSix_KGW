@@ -39,7 +39,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* ItemButton;
-
+	
+	// DA(UI Info)
+	// 
 	// UI 내 추가사항
 	// 보조무기, 기관단총, 스킬, 방어 등 타입 SubClass 분리 Weapon / SubWeapon / Skill / Armor
 	// 아이템 이름	 ItemName
@@ -58,7 +60,7 @@ protected:
 	// 함수로 관리해야 하는 정보
 	// GetOwingPlayer를 통한 플레이어 컨트롤러 및 GetPawn을 통한 플레이어 정보
 	// 버튼 : 오버랩, 클릭 다이나믹
-	// 오버랩 : 버튼 색상 변경
+	// 오버랩 : 버튼색상 변경 - WBP 디자이너 / 아이템 설명 관련 
 	// 클릭 : 해당 플레이어 캐릭터에게 선택한 아이템 제공, 해당 아이템 버튼 색상 변경(플레이어가 가지고 있는 인벤토리 정보를 통해 변경)
 
 	

@@ -24,6 +24,7 @@ void UBaseItemWidget::NativeOnInitialized()
 void UBaseItemWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+
 }
 
 void UBaseItemWidget::NativeDestruct()
