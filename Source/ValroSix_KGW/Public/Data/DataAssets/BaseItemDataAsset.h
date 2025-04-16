@@ -36,6 +36,9 @@ struct FUIItemInfo
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	EItemCategory ItemCategory;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<AActor> ItemClass;
 };
 
 UCLASS()

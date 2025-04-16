@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class VALROSIX_KGW_API UWeaponDataAsset : public UBaseItemDataAsset //public UPrimaryDataAsset
+class VALROSIX_KGW_API UWeaponDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 	
