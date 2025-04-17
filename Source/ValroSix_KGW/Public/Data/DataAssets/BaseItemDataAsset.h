@@ -11,6 +11,14 @@
  */
 
 UENUM(BlueprintType)
+enum class EItemWidgetType : uint8
+{
+	Weapon	UMETA(DisplayName = "무기"),
+	Armor	UMETA(DisplayName = "방어구"),
+	Ability	UMETA(DisplayName = "스킬")
+};
+
+UENUM(BlueprintType)
 enum class EItemCategory : uint8
 {
 	SMG			UMETA(DisplayName = "기관단총"),
@@ -29,16 +37,22 @@ struct FUIItemInfo
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	EItemWidgetType WidgetType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	EItemCategory ItemCategory;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText ItemName;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UTexture2D* ItemImage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	EItemCategory ItemCategory;
+	TSubclassOf<AActor> ItemClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<AActor> ItemClass;
+	float ComponentValue;
 };
 
 UCLASS()
@@ -49,6 +63,6 @@ class VALROSIX_KGW_API UBaseItemDataAsset : public UPrimaryDataAsset
 	
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-	FUIItemInfo UIInfo;
+	TArray<FUIItemInfo> UIInfo;
 	
 };
