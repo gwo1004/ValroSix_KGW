@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Data/DataAssets/BaseItemDataAsset.h"
 #include "BaseItemWidget.generated.h"
 
 /**
@@ -29,6 +30,10 @@ protected:
 
 	UFUNCTION()
 	virtual void EquipItem();
+
+public:
+	UFUNCTION()
+	virtual void SetItemDataBindingWidget(const FUIItemInfo& Data);
 
 protected:
 	UPROPERTY(meta = (BindWidget))

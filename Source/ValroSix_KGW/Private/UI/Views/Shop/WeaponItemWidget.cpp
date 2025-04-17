@@ -2,6 +2,8 @@
 
 
 #include "UI/Views/Shop/WeaponItemWidget.h"
+#include "Components/TextBlock.h"
+#include "Components/Image.h"
 
 void UWeaponItemWidget::NativeOnInitialized()
 {
@@ -24,4 +26,9 @@ void UWeaponItemWidget::HoverItem()
 
 void UWeaponItemWidget::EquipItem()
 {
+}
+
+void UWeaponItemWidget::SetItemDataBindingWidget(const FUIItemInfo& Data)
+{
+	Super::SetItemDataBindingWidget(Data);
 }

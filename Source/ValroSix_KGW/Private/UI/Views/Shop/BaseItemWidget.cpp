@@ -39,3 +39,16 @@ void UBaseItemWidget::HoverItem()
 void UBaseItemWidget::EquipItem()
 {
 }
+
+void UBaseItemWidget::SetItemDataBindingWidget(const FUIItemInfo& Data)
+{
+	if (ItemTexture)
+	{
+		ItemTexture->SetBrushFromTexture(Data.ItemImage);
+	}
+
+	if (ItemName)
+	{
+		ItemName->SetText(Data.ItemName);
+	}
+}

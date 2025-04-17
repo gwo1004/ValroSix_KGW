@@ -25,3 +25,8 @@ void UArmorItemWidget::HoverItem()
 void UArmorItemWidget::EquipItem()
 {
 }
+
+void UArmorItemWidget::SetItemDataBindingWidget(const FUIItemInfo& Data)
+{
+	Super::SetItemDataBindingWidget(Data);
+}

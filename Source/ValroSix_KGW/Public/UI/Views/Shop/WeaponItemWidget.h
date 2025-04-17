@@ -23,4 +23,6 @@ protected:
 
 	virtual void EquipItem() override;
 	
+public:
+	virtual void SetItemDataBindingWidget(const FUIItemInfo& Data) override;
 };
