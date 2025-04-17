@@ -30,6 +30,12 @@ void UBaseItemWidget::NativeConstruct()
 void UBaseItemWidget::NativeDestruct()
 {
 	Super::NativeDestruct();
+
+	if (ItemButton)
+	{
+		ItemButton->OnHovered.RemoveAll(this);
+		ItemButton->OnClicked.RemoveAll(this);
+	}
 }
 
 void UBaseItemWidget::HoverItem()
@@ -42,12 +48,14 @@ void UBaseItemWidget::EquipItem()
 
 void UBaseItemWidget::SetItemDataBindingWidget(const FUIItemInfo& Data)
 {
-	if (ItemTexture)
+	ItemInfo = Data;
+
+	if (ItemTexture && Data.ItemImage)
 	{
 		ItemTexture->SetBrushFromTexture(Data.ItemImage);
 	}
 
-	if (ItemName)
+	if (ItemName && !Data.ItemName.IsEmpty())
 	{
 		ItemName->SetText(Data.ItemName);
 	}

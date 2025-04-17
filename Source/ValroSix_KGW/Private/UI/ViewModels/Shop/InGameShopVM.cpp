@@ -70,10 +70,9 @@ void UInGameShopVM::PoplulateItemWidget()
 			continue;
 		}
 
-		ItemWidget->SetItemDataBindingWidget(Info);
-
 		if (UPanelWidget** TargetPanel = CategoryBoxMap.Find(Info.ItemCategory))
 		{
+			ItemWidget->SetItemDataBindingWidget(Info);
 			(*TargetPanel)->AddChild(ItemWidget);
 		}
 	}

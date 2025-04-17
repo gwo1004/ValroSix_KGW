@@ -45,6 +45,8 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UButton* ItemButton;
 	
+	FUIItemInfo ItemInfo;
+
 	// DA(UI Info)
 	// 
 	// UI 내 추가사항
