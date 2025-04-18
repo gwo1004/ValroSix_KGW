@@ -19,7 +19,7 @@ protected:
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
 
-	void CheckNullObject(UObject* CheckObject);
+	bool CheckNullObject(UObject* CheckObject);
 public:
 	void DelegateBinding();
 protected:

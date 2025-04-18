@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "Weapons\BaseWeapon.h"
 #include "BaseItemDataAsset.generated.h"
 
 /**
@@ -49,7 +50,7 @@ struct FUIItemInfo
 	UTexture2D* ItemImage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<AActor> ItemClass;
+	TSubclassOf<ABaseWeapon> ItemClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float ComponentValue;

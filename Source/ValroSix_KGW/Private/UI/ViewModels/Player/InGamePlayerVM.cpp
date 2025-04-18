@@ -22,8 +22,8 @@ void UInGamePlayerVM::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	CheckNullObject(StatusWidget);
-	CheckNullObject(RoundStateWidget);
+	if (!CheckNullObject(StatusWidget)) return;
+	if (!CheckNullObject(RoundStateWidget)) return;
 
 	DelegateBinding();
 }
@@ -41,13 +41,14 @@ void UInGamePlayerVM::NativeDestruct()
 	}
 }
 
-void UInGamePlayerVM::CheckNullObject(UObject* CheckObject)
+bool UInGamePlayerVM::CheckNullObject(UObject* CheckObject)
 {
 	if (!CheckObject)
 	{
 		UE_LOG(LogUI, Warning, TEXT("%s Class Is Null"), *CheckObject->GetName());
-		return;
+		return false;
 	}
+	return true;
 }
 
 void UInGamePlayerVM::DelegateBinding()

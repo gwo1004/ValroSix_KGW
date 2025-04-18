@@ -36,7 +36,7 @@ public:
 	UWeaponComponent* GetWeaponComponent() const { return WeaponComponent; }
 
 	UFUNCTION(Server, Unreliable)
-	void Server_EquipWeapon(TSubclassOf<ABaseWeapon> ShopWeaponClass);
+	void Server_EquipWeapon(int32 WeaponType, TSubclassOf<ABaseWeapon> ShopWeaponClass);
 
 protected:
 	//Enhanced Input Actions Function
@@ -112,8 +112,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ABaseWeapon> MeleeWeaponClass;
 
-
-	void AttachWeapon();
 	void SwitchCurrentWeapon(int32 WeaponType);
 private:
 	void SpawnSetUpCamera();

@@ -18,16 +18,17 @@ UCLASS()
 class VALROSIX_KGW_API UInGameShopVM : public UUserWidget
 {
 	GENERATED_BODY()
-	
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
+	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 
-	void CheckNullObject(UObject* CheckObject);
+	bool CheckNullObject(UObject* CheckObject);
 	TSubclassOf<class UBaseItemWidget> GetWidgetClassByEnumWidgetType(EItemWidgetType Type);
 	void PoplulateItemWidget();
 
+	void CloseWidget();
 private:
 	void BindCategoryBox();
 protected:

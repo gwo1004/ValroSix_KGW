@@ -38,7 +38,7 @@ void ABasePlayableCharacter::BeginPlay()
 
 	if (HasAuthority())
 	{
-		AttachWeapon();
+		Server_EquipWeapon((int32)EWeaponType::Melee, MeleeWeaponClass);
 	}
 }
 
@@ -210,22 +210,11 @@ void ABasePlayableCharacter::VisibilityMesh(const bool& IsFPSCamera)
 	FPSCameraComp->SetActive(IsFPSCamera);
 }
 
-void ABasePlayableCharacter::Server_EquipWeapon_Implementation(TSubclassOf<ABaseWeapon> ShopWeaponClass)
+void ABasePlayableCharacter::Server_EquipWeapon_Implementation(int32 WeaponType, TSubclassOf<ABaseWeapon> ShopWeaponClass)
 {
 	if (WeaponComponent && *ShopWeaponClass)
 	{
-		//WeaponComponent->EquipWeapon(WeaponClass->GetWeaponType(), WeaponClass);
-	}
-}
-
-// TODO :Event 형식으로 UI와 연동, 해당 WeaponClass를 WeaponComponent에 추가 요청.
-void ABasePlayableCharacter::AttachWeapon()
-{
-	if (WeaponComponent)
-	{
-		WeaponComponent->EquipWeapon(EWeaponType::Rifle, WeaponClass);
-		WeaponComponent->EquipWeapon(EWeaponType::Pistol, SubWeaponClass);
-		WeaponComponent->EquipWeapon(EWeaponType::Melee, MeleeWeaponClass);
+		WeaponComponent->EquipWeapon((EWeaponType)WeaponType, ShopWeaponClass);
 	}
 }
 

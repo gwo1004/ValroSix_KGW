@@ -13,11 +13,13 @@ void UInGameShopVM::NativeOnInitialized()
 	Super::NativeOnInitialized();
 
 	BindCategoryBox();
+
 }
 
 void UInGameShopVM::NativeConstruct()
 {
 	Super::NativeConstruct();
+
 	PoplulateItemWidget();
 }
 
@@ -26,13 +28,28 @@ void UInGameShopVM::NativeDestruct()
 	Super::NativeDestruct();
 }
 
-void UInGameShopVM::CheckNullObject(UObject* CheckObject)
+FReply UInGameShopVM::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+{
+	const FKey PressKey = InKeyEvent.GetKey();
+
+	if (PressKey == EKeys::B || PressKey == EKeys::Escape)
+	{
+		CloseWidget();
+		return FReply::Handled();
+	}
+
+
+	return Super::NativeOnKeyDown(InGeometry, InKeyEvent);
+}
+
+bool UInGameShopVM::CheckNullObject(UObject* CheckObject)
 {
 	if (!CheckObject)
 	{
 		UE_LOG(LogUI, Warning, TEXT("%s Class Is Null"), *CheckObject->GetName());
-		return;
+		return false;
 	}
+	return true;
 }
 
 TSubclassOf<class UBaseItemWidget> UInGameShopVM::GetWidgetClassByEnumWidgetType(EItemWidgetType Type)
@@ -52,7 +69,7 @@ TSubclassOf<class UBaseItemWidget> UInGameShopVM::GetWidgetClassByEnumWidgetType
 
 void UInGameShopVM::PoplulateItemWidget()
 {
-	CheckNullObject(UIInfoDataAsset);
+	if(!CheckNullObject(UIInfoDataAsset)) return;
 
 	for (const FUIItemInfo& Info : UIInfoDataAsset->UIInfo)
 	{
@@ -75,6 +92,19 @@ void UInGameShopVM::PoplulateItemWidget()
 			ItemWidget->SetItemDataBindingWidget(Info);
 			(*TargetPanel)->AddChild(ItemWidget);
 		}
+	}
+
+}
+
+void UInGameShopVM::CloseWidget()
+{
+	SetIsFocusable(false);
+	RemoveFromParent();
+
+	if(APlayerController* PC = GetOwningPlayer())
+	{
+		PC->SetInputMode(FInputModeGameOnly());
+		PC->bShowMouseCursor = false;
 	}
 
 }

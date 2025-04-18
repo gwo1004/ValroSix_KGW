@@ -84,6 +84,7 @@ void ABasePlayerController::Client_ShowMainWidget_Implementation()
 		if (InGameWidget)
 		{
 			InGameWidget->SetOwningPlayer(this);
+			InGameWidget->Priority = 5;
 			InGameWidget->AddToViewport();
 		}
 	}
@@ -96,10 +97,17 @@ void ABasePlayerController::Client_ShowShopWidget_Implementation()
 		ShopWidget = CreateWidget<UInGameShopVM>(this, ShopWidgetClass);
 		if(ShopWidget)
 		{
+			FInputModeGameAndUI InputMode;
+			InputMode.SetWidgetToFocus(ShopWidget->TakeWidget());
+			InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+			SetInputMode(InputMode);
+
 			bShowMouseCursor = true;
-			FInputModeGameAndUI CurrentUIMode;
-			SetInputMode(CurrentUIMode);
+			ShopWidget->SetKeyboardFocus();
+			ShopWidget->SetIsFocusable(true);
+
 			ShopWidget->SetOwningPlayer(this);
+			ShopWidget->Priority = 10;
 			ShopWidget->AddToViewport();
 		}
 	}
@@ -111,7 +119,7 @@ void ABasePlayerController::BeginPlay()
 
 	if (IsLocalController())
 	{
-		//GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ABasePlayerController::Client_ShowMainWidget);
+		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ABasePlayerController::Client_ShowMainWidget);
 		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ABasePlayerController::Client_ShowShopWidget);
 	}
 }
