@@ -9,6 +9,8 @@ AWeapon_AR4::AWeapon_AR4()
 	PrimaryActorTick.bCanEverTick = false;
 
 	bIsAuto = true;
+
+	WeaponType = EWeaponType::Rifle;
 }
 
 void AWeapon_AR4::BeginPlay()

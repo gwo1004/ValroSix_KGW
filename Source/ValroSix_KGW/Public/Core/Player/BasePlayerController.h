@@ -48,6 +48,9 @@ public:
 
 	UFUNCTION(Client, Reliable)
 	void Client_ShowMainWidget();
+
+	UFUNCTION(Client, Reliable)
+	void Client_ShowShopWidget();
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
@@ -65,7 +68,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UInGamePlayerVM> InGameWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UInGameShopVM> ShopWidgetClass;
 private:
 	UPROPERTY()
 	class UInGamePlayerVM* InGameWidget;
+
+	UPROPERTY()
+	class UInGameShopVM* ShopWidget;
 };

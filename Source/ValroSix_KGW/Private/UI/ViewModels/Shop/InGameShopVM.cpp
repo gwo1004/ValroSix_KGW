@@ -12,13 +12,13 @@ void UInGameShopVM::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	CheckNullObject(WeaponWidgetClass);
-	CheckNullObject(ArmorWidgetClass);
+	BindCategoryBox();
 }
 
 void UInGameShopVM::NativeConstruct()
 {
 	Super::NativeConstruct();
+	PoplulateItemWidget();
 }
 
 void UInGameShopVM::NativeDestruct()

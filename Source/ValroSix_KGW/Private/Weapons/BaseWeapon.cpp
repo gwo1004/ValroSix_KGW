@@ -21,6 +21,8 @@ ABaseWeapon::ABaseWeapon()
 
 	MuzzleSocketName = TEXT("MuzzleSocket");
 
+	WeaponType = EWeaponType::Unarmed;
+
 	bReplicates = true;
 	SetReplicatingMovement(true);
 }

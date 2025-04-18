@@ -7,14 +7,6 @@
 #include "Weapons/BaseWeapon.h"
 #include "WeaponComponent.generated.h"
 
-UENUM(BlueprintType)
-enum class EWeaponType : uint8
-{
-	Unarmed UMETA(DisplayName = "UnArmed"),
-	Rifle	UMETA(DisplayName = "Rifle"),
-	Pistol	UMETA(DisplayName = "Pistol"),
-	Melee	UMETA(DisplayName = "Melee")
-};
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWeaponTypeChanged, ABaseWeapon*, InPrevType, ABaseWeapon*, InCurrentType);
 

@@ -9,6 +9,8 @@ AWeapon_Revolver::AWeapon_Revolver()
 	PrimaryActorTick.bCanEverTick = false;
 
 	bIsAuto = false;
+
+	WeaponType = EWeaponType::Pistol;
 }
 
 void AWeapon_Revolver::BeginPlay()

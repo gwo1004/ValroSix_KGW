@@ -7,6 +7,8 @@
 AWeapon_Knife::AWeapon_Knife()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	WeaponType = EWeaponType::Melee;
 }
 
 void AWeapon_Knife::Fire()

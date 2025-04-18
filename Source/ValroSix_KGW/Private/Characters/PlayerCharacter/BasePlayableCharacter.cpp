@@ -210,6 +210,14 @@ void ABasePlayableCharacter::VisibilityMesh(const bool& IsFPSCamera)
 	FPSCameraComp->SetActive(IsFPSCamera);
 }
 
+void ABasePlayableCharacter::Server_EquipWeapon_Implementation(TSubclassOf<ABaseWeapon> ShopWeaponClass)
+{
+	if (WeaponComponent && *ShopWeaponClass)
+	{
+		//WeaponComponent->EquipWeapon(WeaponClass->GetWeaponType(), WeaponClass);
+	}
+}
+
 // TODO :Event 형식으로 UI와 연동, 해당 WeaponClass를 WeaponComponent에 추가 요청.
 void ABasePlayableCharacter::AttachWeapon()
 {

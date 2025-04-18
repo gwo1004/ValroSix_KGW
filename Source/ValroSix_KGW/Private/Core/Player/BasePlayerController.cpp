@@ -6,6 +6,7 @@
 #include "InputMappingContext.h"
 #include "Data/DataAssets/PlayerInputKeyData.h"
 #include "UI/ViewModels/Player/InGamePlayerVM.h"
+#include "UI/ViewModels/Shop/InGameShopVM.h"
 
 ABasePlayerController::ABasePlayerController()
 {
@@ -88,13 +89,30 @@ void ABasePlayerController::Client_ShowMainWidget_Implementation()
 	}
 }
 
+void ABasePlayerController::Client_ShowShopWidget_Implementation()
+{
+	if (IsLocalController() && ShopWidgetClass)
+	{
+		ShopWidget = CreateWidget<UInGameShopVM>(this, ShopWidgetClass);
+		if(ShopWidget)
+		{
+			bShowMouseCursor = true;
+			FInputModeGameAndUI CurrentUIMode;
+			SetInputMode(CurrentUIMode);
+			ShopWidget->SetOwningPlayer(this);
+			ShopWidget->AddToViewport();
+		}
+	}
+}
+
 void ABasePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
 	if (IsLocalController())
 	{
-		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ABasePlayerController::Client_ShowMainWidget);
+		//GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ABasePlayerController::Client_ShowMainWidget);
+		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ABasePlayerController::Client_ShowShopWidget);
 	}
 }
 

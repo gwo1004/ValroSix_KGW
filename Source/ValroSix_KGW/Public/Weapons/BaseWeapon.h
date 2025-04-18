@@ -6,6 +6,15 @@
 #include "GameFramework/Actor.h"
 #include "BaseWeapon.generated.h"
 
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	Unarmed UMETA(DisplayName = "UnArmed"),
+	Rifle	UMETA(DisplayName = "Rifle"),
+	Pistol	UMETA(DisplayName = "Pistol"),
+	Melee	UMETA(DisplayName = "Melee")
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangedAmmo, int32, AmmoValue);
 
 UCLASS()
@@ -33,6 +42,7 @@ public:
 	FRotator GetSocketRotation() const { return SocketRotationOffset; }
 	int32 GetCurrentAmmo() const { return CurrentAmmo; }
 	int32 GetReserveAmmo() const { return CurrentReserveAmmo; }
+	EWeaponType GetWeaponType() const { return WeaponType; }
 
 protected:
 	virtual void InitializedWeaponData();
@@ -51,6 +61,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Socket Offset")
 	FRotator SocketRotationOffset;
 
+	UPROPERTY()
+	EWeaponType WeaponType;
 //	Delegates
 public:
 	UPROPERTY(BlueprintAssignable, Category = "UI | Ammo")

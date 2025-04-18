@@ -35,6 +35,9 @@ public:
 	UPlayerHealthComponent* GetHealthComponent() const { return HealthComponent; }
 	UWeaponComponent* GetWeaponComponent() const { return WeaponComponent; }
 
+	UFUNCTION(Server, Unreliable)
+	void Server_EquipWeapon(TSubclassOf<ABaseWeapon> ShopWeaponClass);
+
 protected:
 	//Enhanced Input Actions Function
 	UFUNCTION()
@@ -108,6 +111,7 @@ protected:
 	TSubclassOf<class ABaseWeapon> SubWeaponClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ABaseWeapon> MeleeWeaponClass;
+
 
 	void AttachWeapon();
 	void SwitchCurrentWeapon(int32 WeaponType);
