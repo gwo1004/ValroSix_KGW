@@ -13,14 +13,14 @@ void UInGameShopVM::NativeOnInitialized()
 	Super::NativeOnInitialized();
 
 	BindCategoryBox();
-
+	PoplulateItemWidget();
 }
 
 void UInGameShopVM::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	PoplulateItemWidget();
+
 }
 
 void UInGameShopVM::NativeDestruct()

@@ -17,6 +17,7 @@ public:
 	virtual void DamageHandle(float DamageAmount, AController* InstigateTarget, AActor* DamageCauser) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	void SetCurrentShield(float UpdateShieldValue) { CurrentShield = UpdateShieldValue; }
 	float GetCurrentShield() const { return CurrentShield; }
 protected:
 	virtual void BeginPlay() override;
