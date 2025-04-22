@@ -176,6 +176,16 @@ void ABasePlayableCharacter::StopCrouch(const FInputActionValue& Value)
 	UE_LOG(LogPlayer, Display, TEXT("StopCrouch Func Call"));
 }
 
+void ABasePlayableCharacter::InputQuietWalk(const FInputActionValue& Value)
+{
+	UE_LOG(LogPlayer, Display, TEXT("InputQuietWalk Func Call"));
+}
+
+void ABasePlayableCharacter::StopQuietWalk(const FInputActionValue& Value)
+{
+	UE_LOG(LogPlayer, Display, TEXT("StopQuietWalk Func Call"));
+}
+
 void ABasePlayableCharacter::ConvertCameraActive(const FInputActionValue& Value)
 {
 	UE_LOG(LogPlayer, Display, TEXT("ConvertCameraActive Func Call"));
@@ -196,6 +206,16 @@ void ABasePlayableCharacter::SwitchPistolWeapon(const FInputActionValue& Value)
 void ABasePlayableCharacter::SwitchMeleeWeapon(const FInputActionValue& Value)
 {
 	SwitchCurrentWeapon((int32)EWeaponType::Melee);
+}
+
+void ABasePlayableCharacter::ReloadWeapon(const FInputActionValue& Value)
+{
+	UE_LOG(LogPlayer, Display, TEXT("ReloadWeapon Func Call"));
+}
+
+void ABasePlayableCharacter::OpenShopWidget(const FInputActionValue& Value)
+{
+	UE_LOG(LogPlayer, Display, TEXT("OpenShop Func Call"));
 }
 
 
@@ -300,6 +320,8 @@ void ABasePlayableCharacter::BindMapToDataAsset()
 	InputActionBindings.Add(EPlayableInputAction::PrimaryWeapon, { {ETriggerEvent::Started, "SwitchPrimaryWeapon"} });
 	InputActionBindings.Add(EPlayableInputAction::PistolWeapon, { {ETriggerEvent::Started, "SwitchPistolWeapon"} });
 	InputActionBindings.Add(EPlayableInputAction::MeleeWeapon, { {ETriggerEvent::Started, "SwitchMeleeWeapon"} });
+	InputActionBindings.Add(EPlayableInputAction::ReloadWeapon, { {ETriggerEvent::Started, "ReloadWeapon"} });
+	InputActionBindings.Add(EPlayableInputAction::OpenShop, { {ETriggerEvent::Started, "OpenShopWidget"} });
 
 	InputActionBindings.Add(EPlayableInputAction::Fire, {
 		{ETriggerEvent::Started, "Fire"},
@@ -309,6 +331,11 @@ void ABasePlayableCharacter::BindMapToDataAsset()
 	InputActionBindings.Add(EPlayableInputAction::Crouch, {
 		{ETriggerEvent::Started, "InputCrouch"},
 		{ETriggerEvent::Completed, "StopCrouch"}
+		});
+
+	InputActionBindings.Add(EPlayableInputAction::QuietlyWalk, {
+		{ETriggerEvent::Started, "InputQuietWalk"},
+		{ETriggerEvent::Completed, "StopQuietWalk"}
 		});
 
 

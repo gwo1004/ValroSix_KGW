@@ -27,7 +27,8 @@ enum class EPlayableInputAction : uint8
 	PistolWeapon	UMETA(DisplayName = "Pistol Weapon"),
 	MeleeWeapon		UMETA(DisplayName = "Melee Weapon"),
 	QuietlyWalk		UMETA(DisplayName = "QuietlyWalk"),
-	ReloadWeapon	UMETA(DisplayName = "Reload")
+	ReloadWeapon	UMETA(DisplayName = "Reload"),
+	OpenShop		UMETA(DisplayName = "OpenShop")
 };
 
 USTRUCT(BlueprintType)

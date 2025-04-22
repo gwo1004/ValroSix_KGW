@@ -71,6 +71,12 @@ protected:
 	void StopCrouch(const FInputActionValue& Value);
 
 	UFUNCTION()
+	void InputQuietWalk(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void StopQuietWalk(const FInputActionValue& Value);
+
+	UFUNCTION()
 	void ConvertCameraActive(const FInputActionValue& Value);
 
 	UFUNCTION()
@@ -79,6 +85,12 @@ protected:
 	void SwitchPistolWeapon(const FInputActionValue& Value);
 	UFUNCTION()
 	void SwitchMeleeWeapon(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void ReloadWeapon(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void OpenShopWidget(const FInputActionValue& Value);
 
 protected:
 	// Camera Components
