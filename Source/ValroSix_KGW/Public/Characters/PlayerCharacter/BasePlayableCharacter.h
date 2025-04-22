@@ -125,6 +125,10 @@ protected:
 	TSubclassOf<class ABaseWeapon> MeleeWeaponClass;
 
 	void SwitchCurrentWeapon(int32 WeaponType);
+
+	// Movement
+	UFUNCTION(Server, Reliable)
+	void Server_SetMaxWalkSpeed(float Speed);
 private:
 	void SpawnSetUpCamera();
 	void SpawnSetUpCharacterComponent();

@@ -33,7 +33,7 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	ABasePlayableCharacter* Player = Cast<ABasePlayableCharacter>(Owner);
 	if (!Player) return;
-
+	
 	bIsJump = Player->GetCharacterMovement()->IsFalling();
 	bIsCrouch = Player->bIsCrouched;
 

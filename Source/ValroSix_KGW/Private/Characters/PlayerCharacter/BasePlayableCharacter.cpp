@@ -178,12 +178,26 @@ void ABasePlayableCharacter::StopCrouch(const FInputActionValue& Value)
 
 void ABasePlayableCharacter::InputQuietWalk(const FInputActionValue& Value)
 {
-	UE_LOG(LogPlayer, Display, TEXT("InputQuietWalk Func Call"));
+	float CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed * 0.5f;
+
+	GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+	
+	if (!HasAuthority())
+	{
+		Server_SetMaxWalkSpeed(CurrentSpeed);
+	}
 }
 
 void ABasePlayableCharacter::StopQuietWalk(const FInputActionValue& Value)
 {
-	UE_LOG(LogPlayer, Display, TEXT("StopQuietWalk Func Call"));
+	float OriginSpeed = GetCharacterMovement()->MaxWalkSpeed * 2.f;
+
+	GetCharacterMovement()->MaxWalkSpeed = OriginSpeed;
+
+	if (!HasAuthority())
+	{
+		Server_SetMaxWalkSpeed(OriginSpeed);
+	}
 }
 
 void ABasePlayableCharacter::ConvertCameraActive(const FInputActionValue& Value)
@@ -250,6 +264,14 @@ void ABasePlayableCharacter::SwitchCurrentWeapon(int32 WeaponType)
 		{
 			PlayerAnim->SetWeaponType(WeaponComponent->GetCurrentWeaponType());
 		}
+	}
+}
+
+void ABasePlayableCharacter::Server_SetMaxWalkSpeed_Implementation(float Speed)
+{
+	if (UCharacterMovementComponent* MoveComp = GetCharacterMovement())
+	{
+		MoveComp->MaxWalkSpeed = Speed;
 	}
 }
 
