@@ -104,6 +104,16 @@ void ABasePlayerController::ToggleShopWidget()
 	}
 }
 
+void ABasePlayerController::CloseSHopWidgetForce()
+{
+	if (!IsLocalController()) return;
+	if (!ShopWidget || ShopWidget->GetVisibility() != ESlateVisibility::Visible) return;
+
+	ShopWidget->SetVisibility(ESlateVisibility::Collapsed);
+	SetInputMode(FInputModeGameOnly());
+	bShowMouseCursor = false;
+}
+
 void ABasePlayerController::Client_ShowMainWidget_Implementation()
 {
 	if (IsLocalController() && InGameWidgetClass)

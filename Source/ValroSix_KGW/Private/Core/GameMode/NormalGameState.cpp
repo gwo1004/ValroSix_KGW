@@ -3,6 +3,7 @@
 
 #include "Core/GameMode/NormalGameState.h"
 #include "Core/GameMode/NormalGameMode.h"
+#include "Core/Player/BasePlayerController.h"
 #include "Net/UnrealNetwork.h"
 
 ANormalGameState::ANormalGameState()
@@ -16,9 +17,23 @@ ANormalGameState::ANormalGameState()
 	bNetLoadOnClient = true;
 }
 
-void ANormalGameState::OnRep_RoundState()
+void ANormalGameState::OnRep_TimeState()
 {
 	OnTimeChanged.Broadcast(CountdownTime);
+}
+
+void ANormalGameState::OnRep_RoundState()
+{
+	if (RoundState == EGameRoundState::RoundPlaying)
+	{
+		for (auto it = GetWorld()->GetPlayerControllerIterator(); it; ++it)
+		{
+			if (ABasePlayerController* PC = Cast<ABasePlayerController>(*it))
+			{
+				PC->CloseSHopWidgetForce();
+			}
+		}
+	}
 }
 
 void ANormalGameState::StartCountDown(float Duration)

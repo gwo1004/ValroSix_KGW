@@ -33,7 +33,7 @@ public:
 	void StartCountDown(float Duration);
 
 public:
-	UPROPERTY(Replicated, BlueprintReadOnly)
+	UPROPERTY(ReplicatedUsing = OnRep_RoundState)
 	EGameRoundState RoundState;
 
 	UPROPERTY(BlueprintAssignable, Category = "UI | Events")
@@ -41,9 +41,12 @@ public:
 
 protected:
 	UFUNCTION()
+	void OnRep_TimeState();
+
+	UFUNCTION()
 	void OnRep_RoundState();
 
-	UPROPERTY(ReplicatedUsing = OnRep_RoundState, BlueprintReadOnly)
+	UPROPERTY(ReplicatedUsing = OnRep_TimeState, BlueprintReadOnly)
 	float CountdownTime;
 	float CountdownStartTime;
 	float DurationTime;

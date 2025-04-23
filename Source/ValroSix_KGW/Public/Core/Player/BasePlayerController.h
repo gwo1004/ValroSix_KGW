@@ -49,6 +49,9 @@ public:
 	UFUNCTION()
 	void ToggleShopWidget();
 
+	UFUNCTION()
+	void CloseSHopWidgetForce();
+
 	UFUNCTION(Client, Reliable)
 	void Client_ShowMainWidget();
 
