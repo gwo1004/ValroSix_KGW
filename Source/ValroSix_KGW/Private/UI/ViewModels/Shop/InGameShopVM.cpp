@@ -34,7 +34,7 @@ FReply UInGameShopVM::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEve
 
 	if (PressKey == EKeys::B || PressKey == EKeys::Escape)
 	{
-		CloseWidget();
+		//CloseWidget();
 		return FReply::Handled();
 	}
 
@@ -106,7 +106,6 @@ void UInGameShopVM::CloseWidget()
 		PC->SetInputMode(FInputModeGameOnly());
 		PC->bShowMouseCursor = false;
 	}
-
 }
 
 void UInGameShopVM::BindCategoryBox()

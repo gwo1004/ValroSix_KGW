@@ -2,6 +2,7 @@
 
 
 #include "Core/Player/BasePlayerController.h"
+#include "Core/GameMode/NormalGameState.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
 #include "Data/DataAssets/PlayerInputKeyData.h"
@@ -76,6 +77,33 @@ void ABasePlayerController::UpdateCurrentIMC(UPlayerInputKeyData* CurrentDataAss
 	}
 }
 
+void ABasePlayerController::ToggleShopWidget()
+{
+	ANormalGameState* GS = GetWorld()->GetGameState<ANormalGameState>();
+	
+	if (!IsLocalController()) return;
+	if (!ShopWidget) return;
+	if (!GS || GS->RoundState != EGameRoundState::Preparation)
+	{
+		return;
+	}
+
+	bool IsCollapsed = (ShopWidget->GetVisibility() == ESlateVisibility::Collapsed) ? true : false;
+
+	ShopWidget->SetVisibility(IsCollapsed ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+
+	if (IsCollapsed)
+	{
+		SetInputMode(FInputModeGameAndUI());
+		bShowMouseCursor = true;
+	}
+	else
+	{
+		SetInputMode(FInputModeGameOnly());
+		bShowMouseCursor = false;
+	}
+}
+
 void ABasePlayerController::Client_ShowMainWidget_Implementation()
 {
 	if (IsLocalController() && InGameWidgetClass)
@@ -100,6 +128,7 @@ void ABasePlayerController::Client_ShowShopWidget_Implementation()
 			ShopWidget->SetIsFocusable(true);
 			ShopWidget->SetOwningPlayer(this);
 			ShopWidget->AddToViewport();
+			ShopWidget->SetVisibility(ESlateVisibility::Collapsed);
 			ShopWidget->Priority = 10;
 
 			FInputModeGameAndUI InputMode;
@@ -109,7 +138,7 @@ void ABasePlayerController::Client_ShowShopWidget_Implementation()
 
 			bShowMouseCursor = true;
 
-			ShopWidget->SetKeyboardFocus();
+			//ShopWidget->SetKeyboardFocus();
 		}
 	}
 }

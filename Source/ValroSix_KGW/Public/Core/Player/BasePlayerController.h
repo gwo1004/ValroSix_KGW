@@ -46,6 +46,9 @@ public:
 	UFUNCTION()
 	void UpdateCurrentIMC(UPlayerInputKeyData* CurrentDataAsset);
 
+	UFUNCTION()
+	void ToggleShopWidget();
+
 	UFUNCTION(Client, Reliable)
 	void Client_ShowMainWidget();
 
