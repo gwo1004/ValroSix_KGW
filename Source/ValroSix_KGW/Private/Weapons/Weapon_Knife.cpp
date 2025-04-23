@@ -16,6 +16,11 @@ void AWeapon_Knife::Fire()
 	UE_LOG(LogWeapon, Display, TEXT("Knife Call"));
 }
 
+void AWeapon_Knife::Reload()
+{
+	UE_LOG(LogWeapon, Display, TEXT("Knife Reload Call"));
+}
+
 void AWeapon_Knife::BeginPlay()
 {
 	Super::BeginPlay();

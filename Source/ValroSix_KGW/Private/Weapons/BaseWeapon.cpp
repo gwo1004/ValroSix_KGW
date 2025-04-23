@@ -45,6 +45,11 @@ void ABaseWeapon::Server_Fire_Implementation()
 	Fire();
 }
 
+void ABaseWeapon::Server_Reload_Implementation()
+{
+	Reload();
+}
+
 void ABaseWeapon::Fire()
 {
 	ACharacter* TargetOwner = Cast<ACharacter>(GetOwner());
@@ -53,6 +58,8 @@ void ABaseWeapon::Fire()
 		UE_LOG(LogWeapon, Error, TEXT("TargetOwner is null - ABaseWeapon.cpp"));
 		return;
 	}
+
+	if (CurrentAmmo <= 0) return;
 
 	Multicast_FireSound();
 	Multicast_FireEffects();

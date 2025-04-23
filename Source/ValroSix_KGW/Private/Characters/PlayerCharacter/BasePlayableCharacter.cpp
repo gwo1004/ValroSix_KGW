@@ -225,6 +225,12 @@ void ABasePlayableCharacter::SwitchMeleeWeapon(const FInputActionValue& Value)
 void ABasePlayableCharacter::ReloadWeapon(const FInputActionValue& Value)
 {
 	UE_LOG(LogPlayer, Display, TEXT("ReloadWeapon Func Call"));
+
+	if (WeaponComponent)
+	{
+		WeaponComponent->ReloadAmmo();
+	}
+
 }
 
 void ABasePlayableCharacter::OpenShopWidget(const FInputActionValue& Value)

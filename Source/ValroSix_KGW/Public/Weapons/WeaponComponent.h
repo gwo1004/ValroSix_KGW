@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void EndFireWeapon();
 
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void ReloadAmmo();
+
 	EWeaponType GetCurrentWeaponType() const { return CurrentWeaponType; }
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -52,9 +55,9 @@ protected:
 	UPROPERTY()
 	EWeaponType CurrentWeaponType;
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentWeapon)
-	class ABaseWeapon* CurrentWeapon;
+	ABaseWeapon* CurrentWeapon;
 	UPROPERTY()
-	class ABaseWeapon* PrevWeapon;
+	ABaseWeapon* PrevWeapon;
 
 	UPROPERTY()
 	TMap<EWeaponType, ABaseWeapon*> EquipWeapons;

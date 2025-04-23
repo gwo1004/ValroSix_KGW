@@ -32,6 +32,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_Fire();
 
+	UFUNCTION(Server, Reliable)
+	void Server_Reload();
+
 	virtual void Fire();
 	virtual void Reload();
 	virtual void ConsumeAmmo();

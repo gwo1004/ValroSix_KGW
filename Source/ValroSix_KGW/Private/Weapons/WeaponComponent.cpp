@@ -148,6 +148,24 @@ void UWeaponComponent::EndFireWeapon()
 	}
 }
 
+void UWeaponComponent::ReloadAmmo()
+{
+	if (!CurrentWeapon)
+	{
+		UE_LOG(LogWeapon, Error, TEXT("Current Weapon is Not Valid. - WeaponComponent.cpp"));
+		return;
+	}
+
+	if (GetOwner()->HasAuthority())
+	{
+		CurrentWeapon->Reload();
+	}
+	else
+	{
+		CurrentWeapon->Server_Reload();
+	}
+}
+
 void UWeaponComponent::OnRep_CurrentWeapon()
 {
 	ABaseWeapon* OldWeapon = PrevWeapon; 
