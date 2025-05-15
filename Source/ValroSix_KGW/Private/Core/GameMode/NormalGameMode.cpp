@@ -5,6 +5,8 @@
 #include "Core/GameMode/NormalGameState.h"
 #include "Characters/PlayerCharacter/BasePlayableCharacter.h"
 #include "Core/Player/BasePlayerController.h"
+#include "Core/Player/CommonPlayerState.h"
+#include "Utility\LoggingCategories.h"
 #include "Kismet/GameplayStatics.h"
 
 ANormalGameMode::ANormalGameMode()
@@ -23,6 +25,37 @@ void ANormalGameMode::BeginPlay()
 void ANormalGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
+
+	ACommonPlayerState* PS = NewPlayer->GetPlayerState<ACommonPlayerState>();
+
+	if (!PS)
+	{
+		UE_LOG(LogGameMode, Error, TEXT("PostLogin - PlayerState is Not Valid."));
+		return;
+	}
+
+	int32 NumAttacker = 0;
+	int32 NumDefencer = 0;
+
+	for (APlayerState* SessionPS : GameState->PlayerArray)
+	{
+		ACommonPlayerState* CurrentPS = Cast<ACommonPlayerState>(SessionPS);
+		if (CurrentPS)
+		{
+			if (CurrentPS->CurrentPlayerTeam == EGameTeam::TeamAttacker) ++NumAttacker;
+			else if (CurrentPS->CurrentPlayerTeam == EGameTeam::TeamDefender) ++NumDefencer;
+		}
+	}
+	
+	if (NumAttacker <= NumDefencer)
+	{
+		PS->SetTeam(EGameTeam::TeamAttacker);
+	}
+	else
+	{
+		PS->SetTeam(EGameTeam::TeamDefender);
+	}
+
 }
 
 void ANormalGameMode::StartPreparationPhase()

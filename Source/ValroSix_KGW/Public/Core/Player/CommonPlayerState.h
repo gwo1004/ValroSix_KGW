@@ -14,7 +14,7 @@ UENUM(BlueprintType)
 enum class EGameTeam : uint8
 {
 	TeamAttacker	UMETA(DisplayName = "Attack Team"),
-	TeamDefencer	UMETA(DisplayName = "Defence Team"),
+	TeamDefender	UMETA(DisplayName = "Defence Team"),
 	TeamPersonal	UMETA(DisplayName = "Personal Team"),
 	TeamNotSelect	UMETA(DisplayName = "Not Setting Team")
 };
@@ -23,11 +23,21 @@ UCLASS()
 class VALROSIX_KGW_API ACommonPlayerState : public APlayerState
 {
 	GENERATED_BODY()
-	
+
 public:
-	//ACommonPlayerState();
+	ACommonPlayerState();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+public:
 	 
+	UPROPERTY(ReplicatedUsing=OnRep_Team)
+	EGameTeam CurrentPlayerTeam;
+
+	UFUNCTION()
+	void OnRep_Team();
 	
-	
-	
+	UFUNCTION()
+	void SetTeam(EGameTeam Team);
+
 };
