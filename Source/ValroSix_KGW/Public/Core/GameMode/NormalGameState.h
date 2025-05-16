@@ -39,6 +39,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "UI | Events")
 	FOnChangedTime OnTimeChanged;
 
+	TArray<class ACommonPlayerState*> AttackTeam;
+	TArray<class ACommonPlayerState*> DefenceTeam;
+
 protected:
 	UFUNCTION()
 	void OnRep_TimeState();

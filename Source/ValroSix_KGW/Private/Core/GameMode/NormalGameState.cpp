@@ -4,6 +4,7 @@
 #include "Core/GameMode/NormalGameState.h"
 #include "Core/GameMode/NormalGameMode.h"
 #include "Core/Player/BasePlayerController.h"
+#include "Core/Player/CommonPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
 ANormalGameState::ANormalGameState()

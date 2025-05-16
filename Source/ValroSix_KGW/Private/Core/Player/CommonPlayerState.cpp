@@ -18,7 +18,10 @@ void ACommonPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 
 void ACommonPlayerState::OnRep_Team()
 {
-	UE_LOG(LogTemp, Log, TEXT("CurrentPlayer Team to : %s"), *UEnum::GetValueAsString(CurrentPlayerTeam));
+	//APlayerController* PC = Cast<APlayerController>(GetOwner());
+	//if (PC && PC->IsLocalController())
+	//{
+	//}
 }
 
 void ACommonPlayerState::SetTeam(EGameTeam Team)
@@ -26,5 +29,10 @@ void ACommonPlayerState::SetTeam(EGameTeam Team)
 	if (HasAuthority())
 	{
 		CurrentPlayerTeam = Team;
+	
+		APlayerController* PC = Cast<APlayerController>(GetOwner());
+		if (!PC) return;
+		UE_LOG(LogTemp, Log, TEXT("Current Player Owner : %s"), *PC->GetName());
+		UE_LOG(LogTemp, Log, TEXT("CurrentPlayer Team to : %s"), *UEnum::GetValueAsString(CurrentPlayerTeam));
 	}
 }

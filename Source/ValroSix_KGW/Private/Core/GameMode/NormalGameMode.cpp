@@ -26,36 +26,69 @@ void ANormalGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-	ACommonPlayerState* PS = NewPlayer->GetPlayerState<ACommonPlayerState>();
+	//ACommonPlayerState* PS = NewPlayer->GetPlayerState<ACommonPlayerState>();
 
-	if (!PS)
+	//if (!PS)
+	//{
+	//	UE_LOG(LogGameMode, Error, TEXT("PostLogin - PlayerState is Not Valid."));
+	//	return;
+	//}
+
+	//if (PS->CurrentPlayerTeam != EGameTeam::TeamNotSelect) return;
+
+	//int32 NumAttacker = 0;
+	//int32 NumDefencer = 0;
+
+	//for (APlayerState* SessionPS : GameState->PlayerArray)
+	//{
+	//	ACommonPlayerState* CurrentPS = Cast<ACommonPlayerState>(SessionPS);
+	//	if (CurrentPS)
+	//	{
+	//		if (CurrentPS->CurrentPlayerTeam == EGameTeam::TeamAttacker) ++NumAttacker;
+	//		else if (CurrentPS->CurrentPlayerTeam == EGameTeam::TeamDefender) ++NumDefencer;
+	//	}
+	//}
+	//
+	//if (NumAttacker <= NumDefencer)
+	//{
+	//	PS->SetTeam(EGameTeam::TeamAttacker);
+	//}
+	//else
+	//{
+	//	PS->SetTeam(EGameTeam::TeamDefender);
+	//}
+
+
+	ANormalGameState* GS = Cast<ANormalGameState>(UGameplayStatics::GetGameState(this));
+
+	if (GS)
 	{
-		UE_LOG(LogGameMode, Error, TEXT("PostLogin - PlayerState is Not Valid."));
-		return;
-	}
+		ACommonPlayerState* PS = NewPlayer->GetPlayerState<ACommonPlayerState>();
 
-	int32 NumAttacker = 0;
-	int32 NumDefencer = 0;
-
-	for (APlayerState* SessionPS : GameState->PlayerArray)
-	{
-		ACommonPlayerState* CurrentPS = Cast<ACommonPlayerState>(SessionPS);
-		if (CurrentPS)
+		if (PS && PS->GetTeam() == EGameTeam::TeamNotSelect)
 		{
-			if (CurrentPS->CurrentPlayerTeam == EGameTeam::TeamAttacker) ++NumAttacker;
-			else if (CurrentPS->CurrentPlayerTeam == EGameTeam::TeamDefender) ++NumDefencer;
+			if (GS->AttackTeam.Num() <= GS->DefenceTeam.Num())
+			{
+				GS->AttackTeam.AddUnique(PS);
+				PS->SetTeam(EGameTeam::TeamAttacker);
+			}
+			else
+			{
+				GS->DefenceTeam.AddUnique(PS);
+				PS->SetTeam(EGameTeam::TeamDefender);
+			}
 		}
-	}
-	
-	if (NumAttacker <= NumDefencer)
-	{
-		PS->SetTeam(EGameTeam::TeamAttacker);
+		else
+		{
+			UE_LOG(LogGameMode, Error, TEXT("PostLogin - PlayerState is Not Valid."));
+			return;
+		}
 	}
 	else
 	{
-		PS->SetTeam(EGameTeam::TeamDefender);
+		UE_LOG(LogGameMode, Error, TEXT("PostLogin - GameState is Not Valid."));
+		return;
 	}
-
 }
 
 void ANormalGameMode::StartPreparationPhase()

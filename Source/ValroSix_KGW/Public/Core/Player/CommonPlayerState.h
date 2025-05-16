@@ -39,5 +39,5 @@ public:
 	
 	UFUNCTION()
 	void SetTeam(EGameTeam Team);
-
+	EGameTeam GetTeam() const { return CurrentPlayerTeam; }
 };
