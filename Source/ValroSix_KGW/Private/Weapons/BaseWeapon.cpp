@@ -3,7 +3,7 @@
 
 #include "Weapons/BaseWeapon.h"
 #include "Characters/PlayerCharacter/BasePlayableCharacter.h"
-#include <Components/SkeletalMeshComponent.h>
+#include "Components/SkeletalMeshComponent.h"
 #include "Utility/LoggingCategories.h"
 #include "Data\DataAssets\WeaponDataAsset.h"
 #include "Kismet\GameplayStatics.h"
@@ -11,6 +11,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Net\UnrealNetwork.h"
 #include "Materials\MaterialInterface.h"
+#include "Utility/TeamFunctionLibrary.h"
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -83,6 +84,8 @@ void ABaseWeapon::Fire()
 
 	if (bHit)
 	{
+		if (UTeamFunctionLibrary::IsActorSameTeam(this, HitResult.GetActor())) return;
+		
 		AActor* HitActor = HitResult.GetActor();
 		if (HitActor)
 		{
