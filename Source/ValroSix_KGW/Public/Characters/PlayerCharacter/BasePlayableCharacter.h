@@ -7,13 +7,15 @@
 #include "Data/DataAssets/PlayerInputKeyData.h"
 #include "BasePlayableCharacter.generated.h"
 
+struct FInputActionValue;
+
 class USpringArmComponent;
 class UCameraComponent;
 
 class UInputAction;
-struct FInputActionValue;
 class UWeaponComponent;
 class UPlayerHealthComponent;
+class UPostProcessComponent;
 
 UCLASS()
 class VALROSIX_KGW_API ABasePlayableCharacter : public ACharacter
@@ -117,6 +119,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	UWeaponComponent* WeaponComponent;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Team")
+	UPostProcessComponent* PostProcessComponent;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ABaseWeapon> WeaponClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")

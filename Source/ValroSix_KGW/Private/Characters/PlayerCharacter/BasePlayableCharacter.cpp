@@ -2,18 +2,21 @@
 
 
 #include "Characters/PlayerCharacter/BasePlayableCharacter.h"
-#include <Camera/CameraComponent.h>
-#include <GameFramework/SpringArmComponent.h>
-#include <GameFramework/CharacterMovementComponent.h>
-#include <EnhancedInputComponent.h>
-#include <InputActionValue.h>
+#include "Characters/Animations/BasePlayerAnimInstance.h"
+#include "Camera/CameraComponent.h"
+#include "EnhancedInputComponent.h"
+#include "InputActionValue.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Core/GameMode/NormalGameState.h"
 #include "Core/Player/BasePlayerController.h"
+#include "Core/Player/CommonPlayerState.h"
 #include "Utility/LoggingCategories.h"
 #include "Weapons/WeaponComponent.h"
 #include "Weapons/BaseWeapon.h"
-#include "Characters/Animations/BasePlayerAnimInstance.h"
 #include "Components/CapsuleComponent.h"
-#include "Components\PlayerHealthComponent.h"
+#include "Components/PlayerHealthComponent.h"
+#include "Components/PostProcessComponent.h"
 
 ABasePlayableCharacter::ABasePlayableCharacter()
 {
@@ -45,7 +48,6 @@ void ABasePlayableCharacter::BeginPlay()
 void ABasePlayableCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ABasePlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -317,6 +319,10 @@ void ABasePlayableCharacter::SpawnSetUpCharacterComponent()
 	// Collisions
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+
+	// Outlines
+	GetMesh()->SetRenderCustomDepth(false);
+	GetMesh()->CustomDepthStencilValue = 0;
 }
 
 void ABasePlayableCharacter::SpawnActorComponent()
@@ -334,6 +340,13 @@ void ABasePlayableCharacter::SpawnActorComponent()
 	{
 		UE_LOG(LogPlayer, Error, TEXT("HealthComponent CDO Fail"));
 	}
+
+	PostProcessComponent = CreateDefaultSubobject<UPostProcessComponent>(TEXT("Team"));
+	if (!PostProcessComponent)
+	{
+		UE_LOG(LogPlayer, Error, TEXT("PostProcessComponent CDO Fail"));
+	}
+
 }
 
 void ABasePlayableCharacter::BindMapToDataAsset()

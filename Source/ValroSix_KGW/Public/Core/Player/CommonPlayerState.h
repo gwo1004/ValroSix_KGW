@@ -27,7 +27,6 @@ class VALROSIX_KGW_API ACommonPlayerState : public APlayerState
 public:
 	ACommonPlayerState();
 
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	 
@@ -35,9 +34,15 @@ public:
 	EGameTeam CurrentPlayerTeam;
 
 	UFUNCTION()
-	void OnRep_Team();
-	
-	UFUNCTION()
 	void SetTeam(EGameTeam Team);
 	EGameTeam GetTeam() const { return CurrentPlayerTeam; }
+	
+	UFUNCTION()
+	void TeamChangedOutLine();
+
+protected:
+	UFUNCTION()
+	void OnRep_Team();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };

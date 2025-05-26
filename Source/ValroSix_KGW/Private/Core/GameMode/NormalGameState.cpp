@@ -6,6 +6,7 @@
 #include "Core/Player/BasePlayerController.h"
 #include "Core/Player/CommonPlayerState.h"
 #include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
 
 ANormalGameState::ANormalGameState()
 {
