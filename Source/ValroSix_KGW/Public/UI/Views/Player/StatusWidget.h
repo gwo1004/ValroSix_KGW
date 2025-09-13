@@ -1,0 +1,50 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
+#include "StatusWidget.generated.h"
+
+/**
+ * 
+ */
+
+class UTextBlock;
+
+UCLASS()
+class VALROSIX_KGW_API UStatusWidget : public UUserWidget
+{
+	GENERATED_BODY()
+
+protected:
+	virtual void NativeOnInitialized() override;
+	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerHealth(const int32& UpdateHealth);
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerShield(const int32& UpdateShield);
+
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponCurrentAmmo(const int32& UpdateCurrentAmmo);
+
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponReserveAmmo(const int32& UpdateReserveAmmo);
+
+protected:
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* CurrentHealth;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* CurrentShield;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* CurrentAmmo;
+	
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* RemainingAmmo;
+};
